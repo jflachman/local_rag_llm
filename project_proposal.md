@@ -6,6 +6,8 @@ Implementation of a Local LLM for Document Review, Summarization, and Assistance
 
 The goal of this project is to implement a Local Language Model (LLM) capable of reviewing, summarizing, and leveraging proprietary documents to facilitate document management tasks. The LLM will run on a laptop equipped with a 6GB RTX 3060 GPU and 32GB RAM. The system will take a list of files as input, provide answers to questions about these files, summarize the content, and assist in writing new documents based on the provided information.
 
+This project will be reused after the class for developing documentation from existing proprietary documents at students current employer.
+
 ## Project Description
 
 This project aims to enhance document management by leveraging an LLM to process and understand proprietary documents. The LLM will be integrated into a local system that will ensure data security and compliance with privacy regulations. The key functionalities of the LLM will include document review, question answering, summarization, and document creation assistance.
