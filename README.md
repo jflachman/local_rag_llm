@@ -1,8 +1,8 @@
 ## Table of Contents
 
  - [README](README.md)
- - [Project Proposal](project_proposal.md)
- - [Technical Approach](technical_approach.md)
+ - [Project Proposal](docs/project_proposal.md)
+ - [Technical Approach](docs/technical_approach.md)
  - [Application Packages](docs/application_packages.md) Usedin this project
    - [Knowledge Documents](docs/knowledge_documents.md)
    - [User Interface](docs/user_interface.md)
