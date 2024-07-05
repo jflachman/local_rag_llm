@@ -89,3 +89,21 @@ A summary of general considerations provided below.
 5. **User Interface:** There are two options for a user interface
    1. Use a simple terminal command line interface for the prompt and response
    2. Use a web based interface.  There are several approaches that may provide a relatively simple implementation.
+
+## LLM implementation Testing
+
+See example:  
+
+  - [Langchain - Build a Local RAG Application](https://python.langchain.com/v0.2/docs/tutorials/local_rag/)
+  - [Run LLMs locally](https://python.langchain.com/v0.1/docs/guides/development/local_llms/)
+
+
+# Next Steps / Future Considerations
+
+- For the purpose of providing a knowledge base LLM soluton from a directory of local files:
+  - Evaluate different Embedding models
+  - Evaluate different LLMs
+  - Evaluate if addtional llamaindex 
+
+- Next Gen LLM Capabilities
+  - Implement Agents.
