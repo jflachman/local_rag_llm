@@ -1,6 +1,21 @@
+## Table of Contents
+
+ - [README](README.md)
+ - [Project Proposal](project_proposal.md)
+ - [Technical Approach](technical_approach.md)
+ - [Application Packages](docs/application_packages.md) Used in this project
+   - [Knowledge Documents](docs/knowledge_documents.md)
+   - [User Interface](docs/user_interface.md)
+   - [LLMs](docs/LLMs.md)
+   - [Embeddings](docs/embedding.md)
+   - [Vector Database](docs/vectorDB.md)
+
+
 # Project Proposal:
 
 Implementation of a Local LLM for Document Review, Summarization, and Assistance
+
+
 
 ## Executive Summary
 
