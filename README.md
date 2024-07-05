@@ -30,6 +30,23 @@ This project aims to enhance document management by leveraging an LLM to process
 
 The [Project Proposal](project_proposal.md) provides more details about the initial project concept and premiliminary approach.
 
+## Use Case Categories
+
+**Reference Source:** This use case section is taken directly from the [High-Level Concepts](https://docs.llamaindex.ai/en/stable/getting_started/concepts/) page of LlamaIndex.
+
+---
+> *There are endless use cases for data-backed LLM applications but they can be roughly grouped into four categories:*
+>
+>***Structured Data Extraction** Pydantic extractors allow you to specify a precise data structure to extract from your data and use LLMs to fill in the missing pieces in a type-safe way. This is useful for extracting structured data from unstructured sources like PDFs, websites, and more, and is key to automating workflows.*
+>
+>***Query Engines:** A query engine is an end-to-end pipeline that allows you to ask questions over your data. It takes in a natural language query, and returns a response, along with reference context retrieved and passed to the LLM.*
+>
+>***Chat Engines:** A chat engine is an end-to-end pipeline for having a conversation with your data (multiple back-and-forth instead of a single question-and-answer).*
+>
+>***Agents:** An agent is an automated decision-maker powered by an LLM that interacts with the world via a set of tools. Agents can take an arbitrary number of steps to complete a given task, dynamically deciding on the best course of action rather than following pre-determined steps. This gives it additional flexibility to tackle more complex tasks.*
+
+---
+
 ## Project Approach
 
 ### Workflow
