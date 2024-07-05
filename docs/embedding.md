@@ -97,4 +97,5 @@ In summary, embeddings are essential for precise and contextually relevant outpu
 
 ## References
 
- - [Mastering RAG: How to Select an Embedding Model](https://www.rungalileo.io/blog/mastering-rag-how-to-select-an-embedding-model)
+- [Mastering RAG: How to Select an Embedding Model](https://www.rungalileo.io/blog/mastering-rag-how-to-select-an-embedding-model)
+- [Embeddings: What they are and why they matter](https://simonwillison.net/2023/Oct/23/embeddings/)

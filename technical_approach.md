@@ -79,10 +79,13 @@ This vector database was selected for ......
   - [Fully local retrieval-augmented generation, step by step](https://www.infoworld.com/article/3715181/fully-local-retrieval-augmented-generation-step-by-step.html)
   - [ NLP | LLM | LangChain RAG | QA Data |](https://www.kaggle.com/code/yannicksteph/nlp-llm-langchain-rag-qa-data)
   - [Local LLM RAG Tutorial: Building a Retrieval Augmented Generation System with Llama 3 and LlamaIndex](https://anakin.ai/blog/local-rag-llm-tutorial/)
+  - [A beginner's guide to building a Retrieval Augmented Generation (RAG) application from scratch](https://learnbybuilding.ai/tutorials/rag-from-scratch)
+
 - Langchain
   - [Langchain - Build a Local RAG Application](https://python.langchain.com/v0.2/docs/tutorials/local_rag/)
   - [Run LLMs locally](https://python.langchain.com/v0.1/docs/guides/development/local_llms/)
   - [Build a Retrieval Augmented Generation (RAG) App](https://python.langchain.com/v0.2/docs/tutorials/rag/)
+  - [Rag from Scratch](https://github.com/langchain-ai/rag-from-scratch)
 
 - Llama-Index
   - [Using LLMs](https://docs.llamaindex.ai/en/stable/understanding/using_llms/using_llms/)
@@ -92,16 +95,19 @@ This vector database was selected for ......
 
 - Github
   - [Langchain RAG tutorial](https://github.com/pixegami/langchain-rag-tutorial)
+    - [Python RAG Tutorial with local LLM](https://www.youtube.com/watch?v=2TJxpyO3ei4) - Video
   - [Self RAG using local LLMs](https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_self_rag_local/)
   - **[Local LLM and RAG](https://github.com/amscotti/local-LLM-with-RAG)**
   - [Local RAG Llama Index](https://github.com/Otman404/local-rag-llamaindex)
   - Krish Naik
-    - [Youtube channel](https://www.youtube.com/@krishnaik06/playlists)
+    - [Youtube channel](https://www.youtube.com/@krishnaik06/playlists) - Video
     - [Langchain examples](https://github.com/krishnaik06/Updated-Langchain/blob/main/README.md)
     - [More Langchain examples](https://github.com/krishnaik06/Complete-Langchain-Tutorials)
     - [LlamaIndex examples](https://github.com/krishnaik06/Llamindex-Projects)
 
-
+- The Future with AI Agents and LLM OS
+  - [AI LLM application pyramid](https://www.youtube.com/watch?v=F5nlMBVZxb4)
+  - [AI Agents Tutorials](https://www.youtube.com/playlist?list=PLpdmBGJ6ELUJ9pOJt8gGPCqVw7wp2pFpM)
 
 ----
 ----

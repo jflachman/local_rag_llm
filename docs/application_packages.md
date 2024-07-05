@@ -30,6 +30,7 @@ The application packages used in this project are described here.  More informat
   - [Getting Started](https://docs.llamaindex.ai/en/stable/getting_started/concepts/)
 
 
+
 ## Embedding Model
 
 
@@ -41,8 +42,15 @@ See VectorDB integrations in Langchain and Llamaindex
 - ChromaDB
 - 
 
+## Local LLM server
+
+Ollama
+- [Ollama GPU support](https://github.com/ollama/ollama/blob/main/docs/gpu.md)
+  
+
 ## LLM Model
 
+- [llama3]
 
 ## User Interface
 
