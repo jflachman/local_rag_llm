@@ -15,7 +15,7 @@
 
 **Executive Summary.**  
 
-Embeddings encode comples, high-dimensional data into lower dimensional numeric space.  Using embeddings prompts and response context can be matched by finding the closest embedded content in the embedding space.
+Embeddings encode complex, high-dimensional data into lower dimensional numeric space.  Using embeddings, prompts and response context can be matched by finding the closest embedded content in the embedding space.
 
 Please see the references below for information on considerations for embedding.  Also see the referen
 

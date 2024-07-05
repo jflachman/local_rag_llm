@@ -13,7 +13,38 @@
 
 # Application Packages
 
-These are the application packages used in this project.
+The application packages used in this project are described here.  More information on the details and options for the application components can be found in the following documents.
+
+
+## Langchain or Llamaindex
+
+- [Langchain](https://www.langchain.com/)
+  - [Documentation](https://python.langchain.com/v0.2/docs/introduction/)
+  - [Templates](https://templates.langchain.com/)
+  - [Integrations](https://python.langchain.com/v0.2/docs/integrations/platforms/)
+
+
+## Llamaindex
+
+- [LlamaIndex](https://www.llamaindex.ai/open-source)
+  - [Getting Started](https://docs.llamaindex.ai/en/stable/getting_started/concepts/)
+
+
+## Embedding Model
+
+
+## Vector Database
+
+See VectorDB integrations in Langchain and Llamaindex
+
+
+- ChromaDB
+- 
+
+## LLM Model
+
+
+## User Interface
 
 
 
