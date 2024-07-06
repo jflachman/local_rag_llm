@@ -1,14 +1,16 @@
 ## Table of Contents
 
- - [README](README.md)
+ - [README](../README.md)
  - [Project Proposal](project_proposal.md)
  - [Technical Approach](technical_approach.md)
- - [Application Packages](docs/application_packages.md) Used in this project
-   - [Knowledge Documents](docs/knowledge_documents.md)
-   - [User Interface](docs/user_interface.md)
-   - [LLMs](docs/LLMs.md)
-   - [Embeddings](docs/embedding.md)
-   - [Vector Database](docs/vectorDB.md)
+ - [Application Packages](application_packages.md) Used in this project
+   - [Knowledge Documents](knowledge_documents.md)
+   - [User Interface](user_interface.md)
+   - [LLMs](LLMs.md)
+   - [Embeddings](embedding.md)
+   - [Vector Database](vectorDB.md)
+   - [Other Notes](misc_notes.md)
+ - [References](references.md)
 
 
 # Project Proposal:
