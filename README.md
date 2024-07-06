@@ -9,7 +9,8 @@
    - [LLMs](docs/LLMs.md)
    - [Embeddings](docs/embedding.md)
    - [Vector Database](docs/vectorDB.md)
-
+   - [Other Notes](docs/misc_notes.md)
+ - [References](docs/references.md)
 
 # LLM/RAG approach for Private Document Store
 

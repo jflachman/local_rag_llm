@@ -9,6 +9,9 @@
    - [LLMs](LLMs.md)
    - [Embeddings](embedding.md)
    - [Vector Database](vectorDB.md)
+   - [Other Notes](misc_notes.md)
+ - [References](references.md)
+
 
 
 # Vector DB
