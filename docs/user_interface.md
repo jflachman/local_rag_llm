@@ -16,7 +16,7 @@
 
 # User Interface
 
-The user interface may be implemented as a command-line interface (CLI) in terminal  It may also be implemented in a web application.  
+The user interface will take the users prompts and display the model's output.  The user interface can be a simple command line interface (CLI).  It can also be a web interface.  One good example is [Streamlit](https://github.com/streamlit/streamlit). 
 
-[Streamlit](https://github.com/streamlit/streamlit) is often used to send the user's prompt to the application and return the models response.
+In this case, the streamlit application is deployed in a docker container.  The streamlit application includes additional code to manage the workflow.
 

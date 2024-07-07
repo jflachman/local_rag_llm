@@ -15,4 +15,6 @@
 
 # Knowledge Documents
 
-4\. **Knowledge documents**: A collection of documents that contain the knowledge your LLM will use to answer your questions. These documents depend on your application. For example, it can be a collection of PDF or text documents that contain your personal blog posts.
+**Knowledge documents** are the collection of documents that contain the LLM will reference to respond to queries from the user.  The knowledge documents can by in many different formats.  pdfs, text, and other documents.
+
+It is also possible to include internet searches as a dynamic set of content for the knowledge base.
