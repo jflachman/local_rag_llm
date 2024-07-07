@@ -18,3 +18,4 @@
 **Knowledge documents** are the collection of documents that contain the LLM will reference to respond to queries from the user.  The knowledge documents can by in many different formats.  pdfs, text, and other documents.
 
 It is also possible to include internet searches as a dynamic set of content for the knowledge base.
+
