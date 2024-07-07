@@ -63,8 +63,24 @@ This vector database was selected for ......
 
 
 
+
+
 ----
 ----
 ----
 ----
 ----
+
+# Steps:
+
+- Document Prep
+  - Local Doc Store
+  - Review local doc store and split documents
+  - create embeddings
+  - save in VectorDB
+
+- 
+Chroma Vector DB
+Ollama
+
+
