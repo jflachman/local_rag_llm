@@ -41,7 +41,7 @@ The application packages used in this project are described here.  More informat
 See VectorDB integrations in Langchain and Llamaindex
 
 
-- ChromaDB
+- ChromaDB will be used for this solution
 - 
 
 ## Local LLM server
