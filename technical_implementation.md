@@ -49,6 +49,11 @@ Check model:
 
 - http://localhost:11434
 
+** Models:**
+
+More models can be found here:
+- [Ollama library](https://ollama.com/library).
+- [Ollama](https://github.com/ollama/ollama?tab=readme-ov-file)
 
 # 3. Container: ChromaDB
 

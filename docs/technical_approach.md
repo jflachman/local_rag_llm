@@ -12,6 +12,9 @@
    - [Other Notes](misc_notes.md)
  - [References](references.md)
 
+# Technical Approach
+
+![RAG LLM](imgs/RAG_LLM.drawio.png)
 
 # Applications and Packages for Knowledge Based LLM
 
@@ -54,7 +57,7 @@ This vector database was selected for ......
 
 ## LLM Model
 
-
+The LLM model is used to provide a response based on the query and knowledge base context.  This solution uses 
 
 
 ## User Interface
