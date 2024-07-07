@@ -16,4 +16,7 @@
 
 # User Interface
 
-5\. **User interface**: The user interface layer will take user prompts and display the model’s output. This can be a simple command-line interface (CLI) or a more sophisticated web application such as [Streamlit](https://github.com/streamlit/streamlit). The user interface will send the user’s prompt to the application and return he model’s response to the user.
+The user interface may be implemented as a command-line interface (CLI) in terminal  It may also be implemented in a web application.  
+
+[Streamlit](https://github.com/streamlit/streamlit) is often used to send the user's prompt to the application and return the models response.
+

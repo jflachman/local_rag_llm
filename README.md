@@ -3,6 +3,7 @@
  - [README](README.md)
  - [Project Proposal](docs/project_proposal.md)
  - [Technical Approach](docs/technical_approach.md)
+ - [Technical Implimentation](technical_implementation.md)
  - [Application Packages](docs/application_packages.md) Usedin this project
    - [Knowledge Documents](docs/knowledge_documents.md)
    - [User Interface](docs/user_interface.md)
@@ -91,6 +92,12 @@ A summary of general considerations provided below.
    1. Use a simple terminal command line interface for the prompt and response
    2. Use a web based interface.  There are several approaches that may provide a relatively simple implementation.
 
+## Technical Implementation
+
+See: The knowledge base [implementation](technical_implementation.md) for details on how to start and run the local Knowledge base.
+
+**Note** The application code is added to the `streamlit_app.py` file and built into the streamlit docker file.  See the Streamlit [README](README.md) for details.
+
 ## LLM implementation Testing
 
 See example:  
@@ -105,6 +112,7 @@ See example:
   - Evaluate different Embedding models
   - Evaluate different LLMs
   - Evaluate if addtional llamaindex 
+  - Add Authentication to docker deployments
 
 - Next Gen LLM Capabilities
   - Implement Agents.
