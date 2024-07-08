@@ -35,6 +35,9 @@ The application packages used in this project are described here.  More informat
   - [Getting Started](https://docs.llamaindex.ai/en/stable/getting_started/concepts/)
 
 
+![Llamaindex](imgs/llamaindex_overview.gif)
+[figure reference:](https://sharmadave.medium.com/llama-index-unleashes-the-power-of-chatgpt-over-your-own-data-b67cc2e4e277) LlamaIndex — Unleashes the power of ChatGPT over your own data
+
 ## Embedding Model
 
 Embeddings encode complex, high-dimensional data into lower dimensional numeric space.  Using embeddings, prompts and response context can be matched by finding the closest embedded content in the embedding space.
