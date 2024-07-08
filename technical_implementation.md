@@ -100,6 +100,8 @@ More models can be found here:
 
 **Build the Container**
 
+`docker build -t streamlit .`
+
 - **Note** The application code is added to the `streamlit_app.py` file and built into the streamlit docker file.  See the Streamlit [README](README.md) for details.
 
 **Startup:**
