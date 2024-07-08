@@ -20,6 +20,7 @@ The application packages used in this project are described here.  More informat
 
 ## Langchain or Llamaindex
 
+- [Let’s talk about LlamaIndex and LangChain](https://superwise.ai/blog/lets-talk-about-llamaindex-and-langchain/)
 - [Langchain](https://www.langchain.com/)
   - [Documentation](https://python.langchain.com/v0.2/docs/introduction/)
   - [Templates](https://templates.langchain.com/)
@@ -30,8 +31,22 @@ The application packages used in this project are described here.  More informat
 
 - [LlamaIndex](https://www.llamaindex.ai/open-source)
   - [Getting Started](https://docs.llamaindex.ai/en/stable/getting_started/concepts/)
+  - [A new document summary index for LLM powered QA systems](https://www.llamaindex.ai/blog/a-new-document-summary-index-for-llm-powered-qa-systems-9a32ece2f9ec)
 
+Libraries:
+-  SimpleDirectoryReader
+-  LLMPredictor
+-  ServiceContext
+-  ResponseSynthesizer
+-  GPTDocumentSummaryIndex
+- from llama_index.indices.document_summary import DocumentSummaryIndexRetriever
+- from llama_index.indices.document_summary import GPTDocumentSummaryIndex
+- from langchain.chat_models import ChatOpenAI
 
+## Langchain
+
+Libraries:
+- chat_models -> OpenAI
 
 ## Embedding Model
 
