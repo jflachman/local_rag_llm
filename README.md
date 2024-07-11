@@ -15,8 +15,10 @@
 
 # LLM/RAG approach for Private Document Store
 
-DU AI ML bootcamp final group project
-
+## Project Team
+[Ashwini Kumar](github.com/sharwnakumar)
+[Jeff Flachman](github.com/jflachman)
+[Kerek Spinney](github.com/kerekspinney)
 
 ## Executive Summary
 

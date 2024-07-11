@@ -14,7 +14,7 @@
 
 # Technical Approach
 
-![RAG LLM](imgs/RAG_LLM.drawio.png)
+![RAG LLM](imgs/RAG_LLM.svg)
 
 # Applications and Packages for Knowledge Based LLM
 
