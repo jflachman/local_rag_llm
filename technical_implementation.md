@@ -17,7 +17,7 @@ The provides a way to run the solution in jupyter.
 
 **Startup:**
 
-- `docker run -it -d -v C:/ML/DU/repos/projects/final/final_project:/home/jovyan/work  -p 8888:8888 quay.io/jupyter/scipy-notebook`
+- `docker run -it -d -v C:/ML/DU/repos/projects/final/local_rag_llm:/home/jovyan/work  -p 8888:8888 quay.io/jupyter/scipy-notebook`
 
 
 **Access:**
@@ -35,7 +35,7 @@ The provides a way to run the solution in jupyter.
 
 **Startup:**
 
-`docker run -d --gpus=all -v C:/ML/DU/repos/projects/final/final_project:/root/.ollama -p 11434:11434 --name ollama ollama/ollama`
+`docker run -d --gpus=all -v C:/ML/DU/repos/projects/final/local_rag_llm:/root/.ollama -p 11434:11434 --name ollama ollama/ollama`
 
 Now you can run a model like Llama 2 inside the container.  **Yes** Run the following command and it will load the model for use by the running container from the previous command.
 
