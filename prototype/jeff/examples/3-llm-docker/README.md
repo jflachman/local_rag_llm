@@ -5,12 +5,12 @@
 
 
 Read Token
-` docker run -it -p 7860:7860 -e HUGGING_FACE_HUB_TOKEN="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" registry.hf.space/harsh-manvar-llama-2-7b-chat-test:latest python app.py`
+` docker run -it -p 7860:7860 -e HUGGING_FACE_HUB_TOKEN="put_hg_token_here" registry.hf.space/harsh-manvar-llama-2-7b-chat-test:latest python app.py`
 
 Write Token
-- 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
 
-` docker run -it -p 7860:7860 -e HUGGING_FACE_HUB_TOKEN="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" registry.hf.space/harsh-manvar-llama-2-7b-chat-test:latest python app.py`
+
+` docker run -it -p 7860:7860 -e HUGGING_FACE_HUB_TOKEN="put_hg_token_here" registry.hf.space/harsh-manvar-llama-2-7b-chat-test:latest python app.py`
 
 http://localhost:7860
 
@@ -19,3 +19,4 @@ http://localhost:7860
 
 	
 `docker run -it -p 7860:7860 -e HUGGING_FACE_HUB_TOKEN="YOUR_VALUE_HERE" local-llm:v1 python app.py`
+ 
