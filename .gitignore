@@ -24,6 +24,11 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.onnx
+*.bin
+*.gguf
+*.safetensors
+
 MANIFEST
 
 # PyInstaller
