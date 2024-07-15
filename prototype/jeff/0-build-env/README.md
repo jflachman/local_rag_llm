@@ -49,6 +49,9 @@ Install a clean ubunto installation from archive
 
     ```
     cp -R /mnt/c/ML/DU/.ssh ~/.ssh
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/*
+    chmod 644 ~/.ssh/*.pub
     ```
 
 ## 1. Create 
