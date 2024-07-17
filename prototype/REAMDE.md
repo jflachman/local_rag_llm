@@ -18,7 +18,7 @@
 
 Each Team member worked on different prototypes 
 
-## [Ashini](ashwini/README.md)
+## [Ashwini](ashwini/README.md)
 
 | Prototype | status |
 | --------- | ------ |
