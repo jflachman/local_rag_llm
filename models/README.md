@@ -5,6 +5,12 @@
 ![B](imgs/qw_1-thumbnail.png)
 
 
+## General Notes:
+
+For files saved as safetensors, read the following: 
+- https://gist.github.com/AltAcc1812/0bc4b80838b49b6c3bdce9d94b66cb54
+- 
+
 ## Qwen (Large and Small Models)
 
 - **large model** - [qwen2_7b](qwen2_7b/README.md)

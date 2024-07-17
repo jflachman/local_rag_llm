@@ -3,22 +3,23 @@
  - [README](README.md)
  - [Project Proposal](docs/project_proposal.md)
  - [Technical Approach](docs/technical_approach.md)
- - [Technical Implimentation](technical_implementation.md)
- - [Application Packages](docs/application_packages.md) Usedin this project
+ - [Technical Implementation](technical_implementation.md)
+ - [Prototypes](Prototypes/README.md) developed in support of the Technical Approach & Implementation
+ - Research, Trades and References
    - [Knowledge Documents](docs/knowledge_documents.md)
    - [User Interface](docs/user_interface.md)
    - [LLMs](docs/LLMs.md)
    - [Embeddings](docs/embedding.md)
    - [Vector Database](docs/vectorDB.md)
    - [Other Notes](docs/misc_notes.md)
- - [References](docs/references.md)
+   - [References](docs/references.md)
 
 # LLM/RAG approach for Private Document Store
 
-## Project Team
-[Ashwini Kumar](github.com/sharwnakumar)
-[Jeff Flachman](github.com/jflachman)
-[Kerek Spinney](github.com/kerekspinney)
+## Project Team (alpha)
+- [Ashwini Kumar](github.com/sharwnakumar)
+- [Jeff Flachman](github.com/jflachman)
+- [Kerek Spinney](github.com/kerekspinney)
 
 ## Executive Summary
 
@@ -93,6 +94,10 @@ A summary of general considerations provided below.
 5. **User Interface:** There are two options for a user interface
    1. Use a simple terminal command line interface for the prompt and response
    2. Use a web based interface.  There are several approaches that may provide a relatively simple implementation.
+
+## Prototypes
+
+The team defined tasks and much of the initial work was completed in the [prototypes](prototype/README.md) directory.
 
 ## Technical Implementation
 
