@@ -1,3 +1,19 @@
+## Table of Contents
+
+ - [README](README.md)
+ - [Project Proposal](docs/project_proposal.md)
+ - [Technical Approach](docs/technical_approach.md)
+ - [Technical Implementation](technical_implementation.md)
+ - [Prototypes](Prototypes/README.md) developed in support of the Technical Approach & Implementation
+ - Research, Trades and References
+   - [Knowledge Documents](docs/knowledge_documents.md)
+   - [User Interface](docs/user_interface.md)
+   - [LLMs](docs/LLMs.md)
+   - [Embeddings](docs/embedding.md)
+   - [Vector Database](docs/vectorDB.md)
+   - [Other Notes](docs/misc_notes.md)
+   - [References](docs/references.md)
+
 # Technical Implementation
 
 This document describes the implementation of the knowledge base.  The knowledge base is deployed is a set of docker containers.  

@@ -3,14 +3,16 @@
  - [README](../README.md)
  - [Project Proposal](project_proposal.md)
  - [Technical Approach](technical_approach.md)
- - [Application Packages](application_packages.md) Used in this project
+ - [Technical Implementation](../technical_implementation.md)
+ - [Prototypes](../Prototypes/README.md) developed in support of the Technical Approach & Implementation
+ - Research, Trades and References
    - [Knowledge Documents](knowledge_documents.md)
    - [User Interface](user_interface.md)
    - [LLMs](LLMs.md)
    - [Embeddings](embedding.md)
    - [Vector Database](vectorDB.md)
    - [Other Notes](misc_notes.md)
- - [References](references.md)
+   - [References](references.md)
 
 # Technical Approach
 

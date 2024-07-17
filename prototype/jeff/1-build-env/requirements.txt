@@ -28,7 +28,7 @@ dirtyjson
 diskcache
 distro
 emoji
-faiss-gpu
+#faiss-gpu
 fastapi
 filetype
 flatbuffers
