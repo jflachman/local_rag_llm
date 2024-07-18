@@ -49,13 +49,17 @@ Chroma's API will run in client-server mode with just this change.
 
 Using this Chroma Client works the same as a local client using: `client = chromadb.PersistentClient(path=db_path)`
 
-**Persistence** is accomplished 
+**Persistence** is accomplished automatically in the Docker deployment by adding the `-e IS_PERSISTENT=TRUE` flag when starting the docker container AND mapping a local db directory to the `/chroma/chroma` directory in the container with `-v /path/to/local/db/dir:/chroma/chroma`.  ChromaDB will create a database when the first collection is created if it does not already exist.
 
 ## 4. Test
 
 See the jupyter notebook 
 
-## 5. Documentation:
+## 5. Future Work
+
+- Adding static Authentication
+
+## 6. Documentation:
 
 Used for this Investigation
 - https://docs.trychroma.com/guides
