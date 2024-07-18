@@ -37,21 +37,32 @@ Started directly with a docker image.  Container ran perfectly.  However, need t
 
 - Try the my parameters version above, but modify `C:/ML/DU/local_rag_llm/db` to the location of the database on you local directory.
 
-## 2. Persistence method
+## 3. Database initialization & Persistence
 
-**TBD**
+The example jupyter notebook [chroma_invtg.ipynb](chroma_invtg.ipynb) walks through using ChromaDB in cluient server mode with Chroma running in a Docker container.  **Please Read** the markdown notes in the Jupyter notebook for more detail.  Also see 
 
+There is no need to use `http` requests and the ChromaDB REAST API.  Instantiating a ChromaDB client that conencts the server is a single command. 
 
-## 3. Database initialization
+    chroma_client = chromadb.HttpClient(host='localhost', port=8200)
 
-**TBD**
+Chroma's API will run in client-server mode with just this change.
+
+Using this Chroma Client works the same as a local client using: `client = chromadb.PersistentClient(path=db_path)`
+
+**Persistence** is accomplished 
 
 ## 4. Test
 
-**TBD**
+See the jupyter notebook 
 
 ## 5. Documentation:
 
-- https://cookbook.chromadb.dev/running/running-chroma/#docker
+Used for this Investigation
+- https://docs.trychroma.com/guides
 - **API** http://localhost:8200/docs
 
+Other references
+- https://docs.trychroma.com/integrations
+- https://docs.trychroma.com/deployment/auth#static-api-token-authentication
+- https://cookbook.chromadb.dev/running/running-chroma/#docker
+- [Getting Started with Chroma DB: A Beginner’s Tutorial](https://medium.com/@pierrelouislet/getting-started-with-chroma-db-a-beginners-tutorial-6efa32300902)
