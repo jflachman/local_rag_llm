@@ -1,0 +1,145 @@
+Welcome back to the third part of this introduction series to Reinforcement Learning!
+
+
+In part 2 we explained some of the basic concepts of RL. We will be using these concepts today to discuss an RL algorithm: the REINFORCE algorithm. REINFORCE is conceptually simple, but it gives you a solid basis for understanding and implementing more advanced algorithms. Specifically, REINFORCE is part of the Policy Gradient family of algorithms.
+
+The blog post will be ordered like this:
+
+The REINFORCE Algorithm
+Pseudo-code
+The Credit Assignment Problem
+On-policy vs. Off-policy RL
+Policy Gradient Baselines
+Note: If you are reading this on a smartphone browser, you might not be able to view the subscripts. You can download the Medium app to mitigate this.
+
+The REINFORCE Algorithm
+REINFORCE is a policy gradient algorithm. Remember that the policy was a function that defines the behaviour of our agent. We will define our policy as a parametrised function:
+
+
+Here, π is our policy with parameters θ. The policy takes a state sₜ as input and produces an action distribution as output (the probabilities that our agent would perform a certain action aₜ). In this case we talk about a stochastic policy, since our policy outputs probabilities instead of an action directly.
+
+Policy gradient algorithms attempt to improve the policy directly, by changing the parameters of the policy function, such that the policy produces better results.
+
+
+This is also what the REINFORCE algorithm is doing. The main idea is this: We start with a random policy (so our agent will take random actions). Next, we let our agent operate in the environment according to this policy. This will produce a trajectory (a series of states and actions that the agent took). If the agent got a high reward during this trajectory, we are going to update our policy such that the trajectory our policy produced is more likely to happen next time. Vice versa, if our agent performed poorly, we are going to make the selected trajectories less likely to be selected. We will repeat this process until we (hopefully) get to a good policy.
+
+Pseudo-code
+The process we just described, would look like this:
+
+initialise policy P with random parameters θ
+repeat until agent performs well:
+    generate trajectory τ (s₀, a₀, s₁, a₁, s₂, ...) with reward R 
+    for each state sₜ in trajectory τ:
+        calculate reward-to-go Gₜ
+    calculate policy gradient L(θ) using G
+    update policy parameters θ using L(θ)
+Let’s break this pseudo-code down into more digestable bits.
+
+initialise policy P with parameters θ
+We will first initialise our policy P and our parameters θ.
+
+In the second part of this series, we mentioned that we will represent our policy by a neural network. However, this doesn’t necessarily need to be the case, for policy gradient algorithms we can use any differentiable learning method. A differentiable learning method, in simpler terms, means that we know a way of calculating how to update the parameters of the policy. In this blog post, I will still opt for a neural network.
+
+
+A neural network takes some input in the first layer and produces some output at the end. The connections (weights) between the neurons are our parameters. They influence the output by strengthening or weakening the signal produced by the previous layer. Initially these connections will be random. So our policy will initially give us random actions.
+
+repeat until agent performs well:
+The next line in our pseudo-code we can somewhat ignore for now. It just means that we will repeat the next steps until we are happy with how our agent is performing.
+
+generate trajectory τ (s₀, a₀, s₁, a₁, s₂, ...) with reward R
+Here we generate a trajectory τ. This means we will now let the agent interact with the environment. We will start in a starting state s₀ (determined by the environment) and then let our agent act according to our policy P with the parameters θ at that point in time. So we will take state s₀, provide it as input to our neural network (our policy) and get a distribution of actions out of it. We can then select an action a₀ by sampling from that distribution. We execute the selected action and arrive at a new state s₁. We repeat this process until we reach a terminal state, the end of the episode (determined by the environment). That is how we get trajectory τ.
+
+
+If you wonder how we can get a distribution from a neural network, then consider that many distributions are defined by just a few parameters. Take a Gaussian (normal) distribution for example, a normal distribution is defined by a mean and a standard deviation. Our network can take a state as input and produce two scalars (a mean and standard deviation) as output. From this we can construct our distribution and sample an action from it.
+
+Note that we don’t necessarily need to make the neural net to output both a mean and a standard deviation. It is fairly common practice to assume a certain standard deviation and let the neural network only predict a mean value.
+
+for each state sₜ in trajectory τ:
+    calculate reward-to-go Gₜ
+Let’s look at the next two lines together, because the first line simply means we will repeat the process for every timestep of our trajectory. The line that follows introduces a new concept, the reward-to-go. The reward-to-go is the reward obtained during the trajectory from a certain state onwards.
+
+
+So for the first state of the trajectory for example, this accounts for the total reward of the trajectory. We will however also take a discount factor into account. A discount factor makes us value rewards in the future less than how we value immediate rewards. This gives us the following formula for the reward-to-go:
+
+
+γ is the discount factor, which has a value between 0 and 1. Rₜ is the reward at timestep t. If we care a lot about future rewards, we could give γ a value of 0.99 for example. If we mostly care about immediate rewards, we could give it a lower value, like 0.7.
+
+calculate policy gradient L(θ) using G
+We have arrived at our policy gradient. You might be wondering what a gradient actually is. A gradient is a mathematical way of determining how a change in the parameters affects the outcome of a function. If you happen to remember derivatives from high school, the idea is somewhat the same. Except, we will be dealing with a function with multiple variables.
+
+
+We want to know how we should update our parameters θ of our policy P, such that the trajectories which have a high reward-to-go Gₜ associated with them, are more likely to happen and vice versa.
+
+You can imagine the policy, the neural network, like a big machine with a lot of knobs to turn. We want to calculate how we should turn those knobs, in order to make the good trajectories more likely to happen. The method that tells us how we should turn those knobs, is the gradient.
+
+Let’s say we have a function J that tells us what return (total reward of a trajectory) we can expect for a given policy:
+
+
+R is the return for a trajectory τ. The formula tells us that for a policy π the expected return is equal to the return of the trajectory we expect to follow, given policy π. We want to maximize the value of J(π). So we will try to calculate the gradient of J. This brings us to the next formula:
+
+
+The ∇ symbol here stands for the gradient. It will tell us how to change the values of θ to increase the value of J. Specifically, the gradient gives us an array of values (one for each parameter in θ). You can think of these values as a direction, pointing towards the place where the outcome of function J would be higher. If we add those values to our parameters θ, the value of J would maximally increase.
+
+Unfortunately, we cannot do any calculus with the above formula directly. We will derive an equivalent formula which we can actually use to do our calculations. The full mathematical derivation would take us a bit too far, but if you are interested in a clear explanation on how to derive the gradient, I invite you to read this webpage by OpenAI: Deriving the simplest policy gradient
+
+The calculation of our policy gradient would look like this:
+
+
+This formula tells us how to calculate the gradient of J. The right-hand side starts with an Expectation-symbol (E). The expectation represents the trajectory τ we expect to get when following policy π (the average trajectory if you will). We cannot exactly calculate which trajectory would be the expected trajectory, because this would require us to calculate all possible trajectories for our policy. Luckily, we can sample one or more trajectories and these should lie close to the expected trajectory.
+
+After sampling, we apply the formula between brackets. π(aₜ ∣ sₜ) represents the probability of action aₜ under policy π given state sₜ. We will however use the log of this probability. Taking the log will make the gradient calculation process a bit more stable as it allows us to sum the gradients for each timestep instead of having to multiply them. Multiplication might make the gradients very small or big, causing numerical instability. You can check the derivation link to see how taking the log is actually equivalent.
+
+Finally, we calculate the gradient for this function, giving us a direction. We multiply this direction with Gₜ, the reward-to-go. If Gₜ was high, we step in the direction of the gradient, making action aₜ more probable. If Gₜ was low, we step in the opposite direction (or we take a relatively smaller step compared to a trajectory with high Gₜ).
+
+The gradient calculation itself is usually taken care of by the programming library we use (for example Tensorflow or Pytorch). If you are interested in how to do the calculation of the policy gradient by hand, both for discrete action spaces and continuous action spaces, then I recommend this excellent post that goes a little deeper into the mathematics: RL Policy Gradients explained by Jonathan Hui
+
+update policy parameters θ using L(θ)
+We arrive at the final line of our algorithm. In this step, we will use the gradient we have just calculated to update the weights of our neural network (the policy).
+
+Our gradient is a vector, containing a value for each parameter in θ. So now we will simply update our weights in the following way:
+
+
+If you are still somewhat confused about how a neural network works and how we can update these weights, I recommend this video explaining backpropagation. Backpropagation is the algorithm that allows calculating and applying these gradients.
+
+
+Note that in the video the narrator talks about a loss function. Strictly speaking we are not computing the gradient of a loss function, even though the calculation is somewhat similar. We are calculating a policy gradient. A loss function (as shown in the video) is a direct indicator of how well your neural network is doing on learning a dataset. A high value for the loss function means your network is making a lot of mistakes. This does not hold true for the policy gradient, there is no indication of how successful our agent is. Another difference is that we are not trying to minimize our policy gradient, but we are trying to maximize it (gradient ascent instead of descent). An easy trick to achieve this, is by performing gradient descent on the negative of our policy gradient.
+
+The Credit Assignment Problem
+You might be looking at the explanation above and wonder “how does REINFORCE filter out the good actions from the bad actions?”. Our agent could take a very bad action, but in the end still end up with a score that was relatively good. In such case, we would reinforce that behaviour, making the bad action more likely to happen. Vice versa, our agent might take a very good action that didn’t lead to a good score. In that case the behaviour that led to the good action would be discouraged.
+
+The problem that we are describing is the so-called credit assignment problem: Our algorithm cannot determine which actions were good actions or bad actions throughout the course of a trajectory. Does this mean that REINFORCE won’t work? No. What will happen is that during the good trajectory, on average, there should be more good actions than bad actions. Vice versa for bad trajectories. So after we have gone through enough iterations, our model will start averaging out these trajectories and should eventually grow a bias towards the good actions.
+
+
+A consequence of the credit assignment problem is that our algorithm is more sample-inefficient. We will need to evaluate more trajectories to start filtering out bad behaviours from good ones. There is a lot of research that tries to tackle specifically this problem. As an example, researchers have attempted to use a separate neural network that learns to infer immediate rewards from actions in trajectories. (Link to paper)
+
+On-policy vs. Off-policy RL
+Another characteristic of the REINFORCE algorithm is that it’s an on-policy algorithm. On-policy means that the policy gets updated, based on the experience collected from that same policy. This is exactly what happens in REINFORCE. Each iteration, our agent behaves according to the latest version of the policy. Afterwards we update the policy based on what we learned from these interactions.
+
+This doesn’t necessarily need to be the case. Off-policy RL algorithms may update their policy based on what they learned from previous or other policies. Take a look at the image below for an example.
+
+
+In the on-policy case the agent is constantly interacting with the environment, and as soon as new experience has been collected, the policy gets updated and the agent behaves accordingly.
+
+In the off-policy case we have an agent (or multiple agents) acting according to a policy, we call this policy the behaviour-policy. The experience they collect gets saved in a buffer. We then use that collected experience to train a policy for action selection. So in this case, our buffer can contain experience from older versions of our policy, or even a completely different policy. The methodology we just described is often seen in Q-learning algorithms.
+
+Off-policy methods have the potential to be more sample-effective, since the agent might need to interact less with the environment. They are also less prone to get stuck in local minima. The reason for this is that in the on-policy case, the agent might have created such a strong bias towards a certain behaviour, that small deviations from this behaviour are no longer good enough to discover new (and improved) strategies. This is why more sophisticated on-policy methods often try to incorporate a mechanism that encourages the agent to do more exploration.
+
+In the most extreme case of off-policy RL, we only let our agent interact with the environment once. So the experience we collected thus far is similar to a limited dataset of example interactions. This is called offline RL and it is one of the more prominent research directions for RL in the last few years. The reason for the popularity of offline RL is simply because of its practicality and applicability in the real world. Offline RL is very hard however, because the agent that collected the training data was behaving according to an unknown policy. If you want to learn more about this offline RL, I invite you to check out the incredible work done by Sergey Levine et al.: Offline RL paper
+
+Policy Gradient Baselines
+We need to talk about one more thing before we can end this part of the blog. You see, we can improve our version of the REINFORCE algorithm in one more subtle way.
+
+In our current version of the algorithm, we apply gradients in such a way that trajectories become more or less likely, proportional with the return (cumulative reward) that these trajectories gave us. How much more or less we make a trajectory is all relative. In mathematical terms, the magnitude of our gradient is completely dependent on the return of a trajectory.
+
+
+In the picture above, you can see we get three scores: 100, 0 and 100. So what our algorithm will do, is update the policy accordingly. This might sound desirable at first, but actually it is not. Because the last trajectory is similar to the first trajectory and once again we make it more likely. After a while, this might induce such a big change in behaviour that it might have an averse effect on the average outcome of the game. If we update our policy parameters too much in a specific direction, they might start to show unwanted behaviours.
+
+So what can we do about this? Intuitively, we want our gradient to update not just according to the score, but we want to update it when our agent did better or worse than expected. This is something we can achieve by introducing a baseline.
+
+
+The formula shown here is exactly the same as our policy gradient, with one difference: We subtracted V(sₜ) from our reward-to-go Gₜ. Remember that the value function is an estimator for the value of being in a certain state and behaving according to a certain policy. So V is a good baselines in this case, because by subtracting V from Gₜ, we will now only update our policy “if we did better or worse than expected”. In practice we don’t know the exact value of V. So usually during the course of our algorithm we additionally train a neural network that estimates V.
+
+So why do baselines actually improve the training process? Mathematically speaking, adding an appropriate baselines will reduce the variance of our samples. In simple terms, our policy will have a clearer learning signal, which will make the training faster and more stable. We will talk more about baselines in a later post.
+
+Conclusion
+We have once again explored a lot of topics in today’s post. Congratulations on making it this far! You should now have a solid understanding of basic policy gradient algorithms. Additionally, this post will prepare you to get your hands dirty in our next post. If this post seemed very theoretical to you, or you learn more quickly through code, then stick around for the final post of this intro series!
