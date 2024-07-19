@@ -7,7 +7,7 @@
 - **July 22-23**:
   - **Task**: Prepare sample documents for ingestion.
   - **Details**: Collect or create a small set of sample documents to be used for ingestion.
-  - **Deliverables**: Sample documents placed in `SOURCE_DOCUMENTS`.
+  - **Deliverables**: Sample documents placed in `Data`.
 
 - **July 24-25**:
   - **Task**: Implement and test the data ingestion script.
