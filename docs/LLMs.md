@@ -21,7 +21,7 @@
 
 
 
-## Trades:  Public vs Private LLMs (response from Co-pilot)
+## 1. Trades:  Public vs Private LLMs (response from Co-pilot)
 
 **Pros of Using LLMs in the Cloud:**
 1. Scalability:
@@ -54,3 +54,93 @@
 **Challenges with LLMs:**
 1. Bias Risk:
     - LLMs can inadvertently reproduce biases present in their training data, emphasizing the need for careful data curation and model monitoring3.
+
+
+## 2. Local LLMs and LLM Servers
+
+There are a number of open source LLM servers available.  Two popular servers are:
+
+- [Ollama](https://ollama.com/)
+- [Llamma-cpp-python]
+
+Digging into some of the posts related to these two, trouble tickets and blog posts.  Comments indicate that Ollama is built ontop of llama-cpp.  
+
+**Ollama**
+- pros:
+    - good documentation
+    - easy to use
+- cons:
+    - Ollama seems to run 2x slower than llama-cpp.
+    - Ollama has a limited number of models available
+
+**Llama-cpp**
+- pros
+    - good documentation
+    - easy to use
+    - server access works the same as local server (one command and then the rest of the code works the same)
+    - Can use any Huggingface model available in an accepted format
+- cons
+    - TBD
+
+## 2.1 Llama-cpp-python server
+
+See the [LLM-server](../prototype/jeff/2-llm-server/README.md) prototype for details:
+
+**Resources:**
+
+- https://llama-cpp-python.readthedocs.io/en/latest/
+- https://github.com/abetlen/llama-cpp-python
+- API: from local docker: http://localhost:8100/docs
+- [API Reference](https://llama-cpp-python.readthedocs.io/en/latest/api-reference/)
+
+**Startup:**
+
+*Generic*
+
+`docker run --rm -it -p 8000:8000 -v /path/to/models:/models -e MODEL=/models/llama-model.gguf ghcr.io/abetlen/llama-cpp-python:latest`
+
+*My parameters*
+
+    `docker run -it -p 8100:8000 -v C:/ML/DU/local_rag_llm/models:/models -e MODEL=/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf  ghcr.io/abetlen/llama-cpp-python:latest`
+
+**Check model:**
+
+- http://localhost:8100/v1/models
+
+**Access:**
+
+- http://localhost:8100
+
+** Models:**
+
+See:  https://huggingface.co
+
+
+## 2.2 Notes on Ollama Server running in a docker container
+
+**Resources:**
+
+- [Ollama is now available as an official Docker image](https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image)
+- [GPU support in Docker Desktop](https://docs.docker.com/desktop/gpu/)
+
+**Startup:**
+
+`docker run -d --gpus=all -v C:/ML/DU/repos/projects/final/local_rag_llm:/root/.ollama -p 11434:11434 --name ollama ollama/ollama`
+
+Now you can run a model like Llama 2 inside the container.  **Yes** Run the following command and it will load the model for use by the running container from the previous command.
+
+`docker exec -it ollama ollama run llama3`
+
+Check model:
+
+`/show info`
+
+**Access:**
+
+- http://localhost:11434
+
+** Models:**
+
+More models can be found here:
+- [Ollama library](https://ollama.com/library).
+- [Ollama](https://github.com/ollama/ollama?tab=readme-ov-file)
