@@ -23,9 +23,9 @@ This document describes the implementation of the knowledge base.  The knowledge
 - [How to create a private ChatGPT that interacts with your local documents](https://bdtechtalks.com/2023/06/01/create-privategpt-local-llm/)
 - [Open Source & Self-hosted RAG LLM Server with ChromaDB, Docker & Ollama](https://medium.com/@mbrazel/open-source-self-hosted-rag-llm-server-with-chromadb-docker-ollama-7e6c6913da7a)
 
-# 1. Container: Jupyter Scipy Notebook
+# 1. Container: Jupyter Scipy Notebook 
 
-The provides a way to run the solution in jupyter.  
+This container is not required for this project.  It provides an easily deployable Python/Jupyter environment if needed/desired and provides a way to prototype and test in jupyter if desired.  Additional packages may be installed in the container through the exec tab in docker desktop.  Using a requirements.txt file accessible through `/home/jovyan/work` in the container allows for bulk installation of packages.  See notes on [WSL/Jupyter environment with VSCode](https://github.com/jflachman/class-notes/blob/main/1.2.3_tool_setup_docker.md) for more information
 
 **Resources:**
 
@@ -41,35 +41,42 @@ The provides a way to run the solution in jupyter.
 - https://localhost:8888/
 
 
-# 2. Container: Ollama
+# 2. Container: llama-cpp-server
+
+See the [LLM-server](../prototype/jeff/2-llm-server/README.md) prototype for details:
 
 **Resources:**
 
-- [Ollama is now available as an official Docker image](https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image)
-- [GPU support in Docker Desktop](https://docs.docker.com/desktop/gpu/)
-- []()
+- https://llama-cpp-python.readthedocs.io/en/latest/
+- https://github.com/abetlen/llama-cpp-python
+- API: from local docker: http://localhost:8100/docs
+- [API Reference](https://llama-cpp-python.readthedocs.io/en/latest/api-reference/)
 
 **Startup:**
 
-`docker run -d --gpus=all -v C:/ML/DU/repos/projects/final/local_rag_llm:/root/.ollama -p 11434:11434 --name ollama ollama/ollama`
+-   *Generic*
 
-Now you can run a model like Llama 2 inside the container.  **Yes** Run the following command and it will load the model for use by the running container from the previous command.
+        docker run --rm -it -p 8000:8000 -v /path/to/models:/models -e MODEL=/models/llama-model.gguf ghcr.io/abetlen/llama-cpp-python:latest
 
-`docker exec -it ollama ollama run llama3`
+-   *My parameters*
 
-Check model:
+        docker run -it -p 8100:8000 -v C:/ML/DU/local_rag_llm/models:/models -e MODEL=/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf  ghcr.io/abetlen/llama-cpp-python:latest
 
-`/show info`
+**Check model:**
+
+- http://localhost:8100/v1/models
+
+**Check GPU Support**
+
+
 
 **Access:**
 
-- http://localhost:11434
+- http://localhost:8100
 
 ** Models:**
 
-More models can be found here:
-- [Ollama library](https://ollama.com/library).
-- [Ollama](https://github.com/ollama/ollama?tab=readme-ov-file)
+See:  https://huggingface.co
 
 # 3. Container: ChromaDB
 

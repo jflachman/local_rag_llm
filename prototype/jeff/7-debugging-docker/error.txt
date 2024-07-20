@@ -1,0 +1,44 @@
+PS C:\ML\DU\local_rag_llm\prototype\jeff\2-llm-server\docker\docker-cuda> docker run  --rm -it -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf -v C:/ML/DU/local_rag_llm/models:/var/model llama-cpp-python-cuda
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.5.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/server/__main__.py", line 97, in <module>
+    main()
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/server/__main__.py", line 83, in main
+    app = create_app(
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/server/app.py", line 150, in create_app
+    set_llama_proxy(model_settings=model_settings)
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/server/app.py", line 70, in set_llama_proxy
+    _llama_proxy = LlamaProxy(models=model_settings)
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/server/model.py", line 31, in __init__
+    self._current_model = self.load_llama_from_model_settings(
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/server/model.py", line 222, in load_llama_from_model_settings
+    _model = create_fn(
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/llama.py", line 354, in __init__
+    raise ValueError(f"Model path does not exist: {model_path}")
+ValueError: Model path does not exist: /models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf
+Exception ignored in: <function Llama.__del__ at 0x7f5cf2b20b80>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/llama.py", line 1972, in __del__
+    self.close()
+  File "/usr/local/lib/python3.10/dist-packages/llama_cpp/llama.py", line 1969, in close
+    self._stack.close()
+AttributeError: 'Llama' object has no attribute '_stack'
+PS C:\ML\DU\local_rag_llm\prototype\jeff\2-llm-server\docker\docker-cuda>
