@@ -2,6 +2,9 @@
 
 # Debugging Docker
 
+Reference:  https://medium.com/@pimterry/5-ways-to-debug-an-exploding-docker-container-4f729e2c0aa8
+
+
 ## My issue requiring the need to debug docker
 
 I had an issue with the llama-cpp-server and needed to debug.  
@@ -36,7 +39,9 @@ I had an issue with the llama-cpp-server and needed to debug.
 
 ## What I did to investigate
 
+Start docker container with:
 
+    docker run -it --entrypoint /bin/bash your-docker-image
 
 
 

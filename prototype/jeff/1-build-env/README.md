@@ -18,14 +18,45 @@
 
 ## Overview
 
-0. **Start with a clean Linux distro in WSL**.  Export and import the distro.
+1. **Start with a clean Linux distro in WSL**.  Export and import the distro.
     - if you do not have a GPU or if your applications are already compiled with CUDA support, then **skip to section 3**.
-1. Install CUDA support if desired unless compiling solutions with CUDA support.  If the proper NVIdia drivers are already installed in Windows Host, then additional CUDA installations may not be needed.  Run the [Test CUDA Notebook](test_cuda.ipynb) to see if additional installs are needed.
-2. NVIDIA CUDA Deep Neural Network library (cuDNN).  This also may not be needed unless compiling solutions with CUDA support.
-3. **Create an AIML Linux Environment**
-4. Where are large files created using WSL distros and Docker.
+2. Install CUDA support if desired unless compiling solutions with CUDA support.  If the proper NVIdia drivers are already installed in Windows Host, then additional CUDA installations may not be needed.  Run the [Test CUDA Notebook](test_cuda.ipynb) to see if additional installs are needed.
+3. NVIDIA CUDA Deep Neural Network library (cuDNN).  This also may not be needed unless compiling solutions with CUDA support.
+4. **Create an AIML Linux Environment**
+5. Where are large files created using WSL distros and Docker.
 
-## 0. Install clean Linux in WSL
+## 1. Install clean Linux in WSL linux distribution (distro) from Microsoft
+
+- Check which installation distros are available:
+
+        wsl -l -o
+
+    Result of that command:
+
+
+        The following is a list of valid distributions that can be installed.
+        Install using 'wsl.exe --install <Distro>'.
+
+        NAME                                   FRIENDLY NAME
+        Ubuntu                                 Ubuntu
+        Debian                                 Debian GNU/Linux
+        kali-linux                             Kali Linux Rolling
+        Ubuntu-18.04                           Ubuntu 18.04 LTS
+        Ubuntu-20.04                           Ubuntu 20.04 LTS
+        Ubuntu-22.04                           Ubuntu 22.04 LTS
+        Ubuntu-24.04                           Ubuntu 24.04 LTS
+        OracleLinux_7_9                        Oracle Linux 7.9
+        OracleLinux_8_7                        Oracle Linux 8.7
+        OracleLinux_9_1                        Oracle Linux 9.1
+        openSUSE-Leap-15.5                     openSUSE Leap 15.5
+        SUSE-Linux-Enterprise-Server-15-SP4    SUSE Linux Enterprise Server 15 SP4
+        SUSE-Linux-Enterprise-15-SP5           SUSE Linux Enterprise 15 SP5
+        openSUSE-Tumbleweed                    openSUSE Tumbleweed
+
+
+## 2. Export clean install as a backup.
+
+
 
 Note:  This assumes that you archived a clean ubunto installation. I save mine in `C:\mywsl` and it may be accessed via `/mywsl`
 
@@ -112,7 +143,219 @@ Install a clean ubunto installation from archive
        2. Note:  Update distro and tar file names as desired in the following command.
           - `wsl --export ubuntu-22.04 /mywsl/exports/ubuntu-clean/ubuntu-22.04-base.tar`
 
-## 1. Install CUDA support
+
+
+
+## 2. Create an AIML Linux environment
+
+Refrence: https://github.com/marklysze/LlamaIndex-RAG-WSL-CUDA
+
+1. Install fresh distro (ubuntu-22.04)
+2. Install MiniConda: https://docs.anaconda.com/miniconda/miniconda-install/
+
+## 2.1 Environment Setup Option 1: miniconda
+
+1. Install miniconda
+    ```
+    mkdir -p ~/miniconda3
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+    rm -rf ~/miniconda3/miniconda.sh
+    ```
+
+2. Initialize miniconda
+
+    ```
+        ~/miniconda3/bin/conda init bash
+        ~/miniconda3/bin/conda init zsh
+    ```
+
+3. Create Env and activate
+
+- https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+    ```
+    conda create --name <my-env>
+    <or in our case>
+    conda env create -f environment.yml
+
+    conda activatge ragllm
+    ```
+
+Note:  Remove a conda environment:  `conda remove -n ragllm --all`
+## 2.2 Environment Setup Option 2: Anaconda
+
+
+`https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh`
+
+
+1. Install anaconda
+    ```
+    mkdir -p ~/anaconda3
+    wget https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh -O ~/anaconda3/anaconda.sh
+    bash ~/anaconda3/anaconda.sh -b -u -p ~/anaconda3
+    rm -rf ~/anaconda3/anaconda.sh
+    ```
+
+2. Initialize anaconda
+
+    ```
+        ~/anaconda3/bin/conda init bash
+        ~/anaconda3/bin/conda init zsh
+    ```
+
+3. Create Env and activate
+
+- https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+    ```
+    conda create --name <my-env>
+    <or in our case>
+    conda env create -f environment.yml
+
+    conda activate ragllm
+    ```
+
+
+4. If problems with installing some packages:
+ 
+   - Comment them out until is completes.
+   - For *llama-cpp-python* issues, see pip install below with link to whl file.
+
+5. Bulk Install Python packages using pip (pip installs)
+
+    ```
+    cp /mnt/c/ML/DU/rag_llm/prototype/jeff/0-build-env/requirements.txt ~/.
+    pip install -r requirement.txt
+## 2.3 Environment Setup Option 3: python venv & pip installs
+
+WSL distro size:
+
+| Distro | Clean |  w/pip installs |
+| ------ | ----- |  -------------- |
+| ubuntu 22.04 aiml | 1.921 GB | |
+| ubuntu 24.04 aiml | 1.727 GB | |
+
+
+1. Install Base Linux Environment (apt installs)
+
+    1. See section "*0. Install clean Linux in WSL*" above
+
+    2. Install linux packages:
+
+```
+        sudo apt-get update
+        sudo apt update
+        sudo apt upgrade
+        sudo apt install pip
+        sudo apt install python3-venv
+```
+
+OBE: xargs sudo apt-get install -y < requirements-apt.txt
+
+
+1. Create a virtual environment
+
+   - Notes: https://docs.python.org/3/tutorial/venv.html
+
+
+    - create environment
+
+        `python -m venv ~/llm-env`
+
+    - activate environment
+
+        `source ~/llm-env/bin/activate`
+
+    - to have this environment set whenever opening a terminal, add the line to your `~/.bashrc`
+         - use nano to edit ~/.bashrc
+           - add `source ~/llm-env/bin/activate` to the ~/.bashrc
+         - **alternately** do this from the command line.
+           - `echo -e "source ~/llm-env/bin/activate" >> ~/.bashrc`
+
+2. Install Python packages using pip (pip installs)
+
+    ```
+    cp /mnt/c/ML/DU/rag_llm/prototype/jeff/0-build-env/requirements.txt ~/.
+    pip install -r requirements.txt
+    ```
+
+3. Install *llama-cpp-python*.  
+
+    find the cuda version
+
+    `nvidia-smi`
+
+    use the whl file that cooresponds to the cuda version.  i.e. cu123 for Cuda 12.3
+
+    ```
+    pip install --no-cache-dir llama-cpp-python==0.2.77 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu123
+
+    pip install --no-cache-dir llama-index-llms-llama-cpp==0.2.77 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu123
+
+    ```
+
+    For more info on *llama-cpp-python* and *llama-index-llms-llama-cpp* whl files, see: https://github.com/abetlen/llama-cpp-python/releases/tag/v0.2.82-cu124
+
+4. To update all pip packages
+
+    1. install pip-review
+
+        `pip install pip-review`
+
+    2. Option 1: Upgrade the packages interactively
+
+
+        `pip-review --local --interactive`
+
+    3. Option 2: Upgrade the packages interactively
+
+        `pip-review --local --auto`
+
+## 2.4 Install Many packages at once (Optional)
+
+
+If you want to install many packages at once.  Create a `requirements.txt` file.  The name of the file is arbitrary.  However, `requirements.txt` is the standard everyone uses.  Then simply list all the packages you want to install.  You may comment out any packages you don't want to install.  The requirements.txt file in this folder is an example. To install all the listed packages, run the following:
+
+    pip intall -r requirements.txt
+
+
+# 4.0 Cleaning up WSL
+
+Large Files are created for WSL and Docker.
+- Large WSL repos: C:\Windows\System32\lxss\tools (100GB)
+- Docker: C:\Users\username\AppData\Local\Docker\wsl\data (55GB)
+
+The following  Assumes wsl exports and instances are saved in:  `C:\mywsl`.  This allows you to monitor your instance size and recreate from a known saved checkpoint you have exported previously.
+
+    ```
+    wsl --export docker-desktop-data /mywsl/exports/docker/docker-desktop-data.tar
+    wsl --export docker-desktop /mywsl/exports/docker/docker-desktop.tar
+
+    wsl --unregister docker-desktop-data
+    wsl --unregister docker-desktop
+
+    wsl --import docker-desktop-data /mywsl/instances/docker-desktop-data /mywsl/exports/docker/docker-desktop-data.tar
+    wsl --import docker-desktop /mywsl/instances/docker-desktop /mywsl/exports/docker/docker-desktop.tar
+    ```
+
+----
+----
+----
+----
+----
+----
+
+----
+# Appendix
+----
+----
+----
+----
+----
+----
+
+## A. Install CUDA support
 
 ### NOTE: Installing CUDA toolkit may not be required for GPU support.
 
@@ -124,7 +367,7 @@ The latest NVIDIA Windows GPU Driver will fully support WSL 2. With CUDA support
 - System Requirements - https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements
 
 
-### 1.1 Install CUDA Runtime libraries
+### A.1 Install CUDA Runtime libraries
 
 
 1. Download and install to CUDA runtime libraries
@@ -167,7 +410,7 @@ The latest NVIDIA Windows GPU Driver will fully support WSL 2. With CUDA support
        `nvcc --version`
 
 
-### 1.2 Install FULL CUDA Toolkit **(If Desired)**
+### A.2 Install FULL CUDA Toolkit **(If Desired)**
 
 **NOTE:** Only if you need developer level integraiton with CUDA.  Otherwise, CUDA 12.X is supported when you install your NVidia drivers in windows.  You may also chose to install only the runtime libraries (see section 1.1 above)
 
@@ -264,7 +507,7 @@ The latest NVIDIA Windows GPU Driver will fully support WSL 2. With CUDA support
 
     `nvcc --version`
 
-## 2. NVIDIA CUDA Deep Neural Network library (cuDNN) **(If Desired)**
+## B. NVIDIA CUDA Deep Neural Network library (cuDNN) **(If Desired)**
 
 You should only need to install the runtime package (see packages below) if you are not compiling an application with cuDNN support.
 
@@ -279,189 +522,11 @@ You should only need to install the runtime package (see packages below) if you 
     python3 -m pip install nvidia-cudnn-cu12
     ```
 
-## 3. Create an AIML Linux environment
-
-Refrence: https://github.com/marklysze/LlamaIndex-RAG-WSL-CUDA
-
-1. Install fresh distro (ubuntu-22.04)
-2. Install MiniConda: https://docs.anaconda.com/miniconda/miniconda-install/
-
-## 3.1 Environment Setup Option 1: miniconda
-
-1. Install miniconda
-    ```
-    mkdir -p ~/miniconda3
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-    rm -rf ~/miniconda3/miniconda.sh
-    ```
-
-2. Initialize miniconda
-
-    ```
-        ~/miniconda3/bin/conda init bash
-        ~/miniconda3/bin/conda init zsh
-    ```
-
-3. Create Env and activate
-
-- https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-
-    ```
-    conda create --name <my-env>
-    <or in our case>
-    conda env create -f environment.yml
-
-    conda activatge ragllm
-    ```
-
-Note:  Remove a conda environment:  `conda remove -n ragllm --all`
-## 3.2 Environment Setup Option 2: Anaconda
-
-
-`https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh`
-
-
-1. Install anaconda
-    ```
-    mkdir -p ~/anaconda3
-    wget https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh -O ~/anaconda3/anaconda.sh
-    bash ~/anaconda3/anaconda.sh -b -u -p ~/anaconda3
-    rm -rf ~/anaconda3/anaconda.sh
-    ```
-
-2. Initialize anaconda
-
-    ```
-        ~/anaconda3/bin/conda init bash
-        ~/anaconda3/bin/conda init zsh
-    ```
-
-3. Create Env and activate
-
-- https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-
-    ```
-    conda create --name <my-env>
-    <or in our case>
-    conda env create -f environment.yml
-
-    conda activate ragllm
-    ```
-
-4. If problems with installing some packages:
- 
-   - Comment them out until is completes.
-   - For *llama-cpp-python* issues, see pip install below with link to whl file.
-
-## 3.3 Environment Setup Option 3: python venv & pip installs
-
-WSL distro size:
-
-| Distro | Clean |  w/pip installs |
-| ------ | ----- |  -------------- |
-| ubuntu 22.04 aiml | 1.921 GB | |
-| ubuntu 24.04 aiml | 1.727 GB | |
-
-
-1. Install Base Linux Environment (apt installs)
-
-    1. See section "*0. Install clean Linux in WSL*" above
-
-    2. Install linux packages:
-
-```
-        sudo apt-get update
-        sudo apt update
-        sudo apt upgrade
-        sudo apt install pip
-        sudo apt install python3-venv
-```
-
-OBE: xargs sudo apt-get install -y < requirements-apt.txt
-
-
-1. Create a virtual environment
-
-   - Notes: https://docs.python.org/3/tutorial/venv.html
-
-
-    - create environment
-
-        `python -m venv ~/llm-env`
-
-    - activate environment
-
-        `source ~/llm-env/bin/activate`
-
-    - to have this environment set whenever opening a terminal, add the line to your `~/.bashrc`
-         - use nano to edit ~/.bashrc
-           - add `source ~/llm-env/bin/activate` to the ~/.bashrc
-         - **alternately** do this from the command line.
-           - `echo -e "source ~/llm-env/bin/activate" >> ~/.bashrc`
-
-2. Install Python packages using pip (pip installs)
-
-    ```
-    cp /mnt/c/ML/DU/rag_llm/prototype/jeff/0-build-env/requirements.txt ~/.
-    pip install -r requirements-pip.txt
-    ```
-
-3. Install *llama-cpp-python*.  
-
-    find the cuda version
-
-    `nvidia-smi`
-
-    use the whl file that cooresponds to the cuda version.  i.e. cu123 for Cuda 12.3
-
-    ```
-    pip install --no-cache-dir llama-cpp-python==0.2.77 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu123
-
-    pip install --no-cache-dir llama-index-llms-llama-cpp==0.2.77 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu123
-
-    ```
-
-    For more info on *llama-cpp-python* and *llama-index-llms-llama-cpp* whl files, see: https://github.com/abetlen/llama-cpp-python/releases/tag/v0.2.82-cu124
-
-4. To update all pip packages (Dangerous - caution if desired)
-
-    1. install pip-review
-
-        `pip install pip-review`
-
-    2. Option 1: Upgrade the packages interactively
-
-
-        `pip-review --local --interactive`
-
-    3. Option 2: Upgrade the packages interactively
-
-        `pip-review --local --auto`
-
-
-# 4.0 Cleaning up WSL
-
-Large Files are created for WSL and Docker.
-- Large WSL repos: C:\Windows\System32\lxss\tools (100GB)
-- Docker: C:\Users\username\AppData\Local\Docker\wsl\data (55GB)
-
-The following  Assumes wsl exports and instances are saved in:  `C:\mywsl`.  This allows you to monitor your instance size and recreate from a known saved checkpoint you have exported previously.
-
-    ```
-    wsl --export docker-desktop-data /mywsl/exports/docker/docker-desktop-data.tar
-    wsl --export docker-desktop /mywsl/exports/docker/docker-desktop.tar
-
-    wsl --unregister docker-desktop-data
-    wsl --unregister docker-desktop
-
-    wsl --import docker-desktop-data /mywsl/instances/docker-desktop-data /mywsl/exports/docker/docker-desktop-data.tar
-    wsl --import docker-desktop /mywsl/instances/docker-desktop /mywsl/exports/docker/docker-desktop.tar
-    ```
-
-
-
-
+----
+----
+----
+----
+----
 
 
 ## Old Notes
