@@ -48,9 +48,32 @@ Tried out available docker image:
   - Try the my parameters version above, but modify `C:/ML/DU/local_rag_llm/db` to the location of the database on you local directory.
 
 
+## 3. Load & Run Ollama model
+
+
+
 ## 3. Load & Run a Model
 
 
 docker exec -it ollama ollama run llama3
 
+## References
 
+- https://github.com/ollama/ollama/blob/main/README.md#quickstart
+- Docker: https://hub.docker.com/r/ollama/ollama
+- Ollama Models: https://ollama.com/library
+- Importing models: https://github.com/ollama/ollama/blob/main/docs/import.md
+- Examples: https://github.com/ollama/ollama/tree/main/examples
+- Ollama API: https://github.com/ollama/ollama/blob/main/docs/api.md
+- 
+
+### Huggingface Leaderboards
+
+- All Leaderboards: https://huggingface.co/spaces?search=leaderboard
+- Model Leaderboard:
+  - https://huggingface.co/open-llm-leaderboard
+  - https://huggingface.co/collections/open-llm-leaderboard/
+  - llm-leaderboard-best-models-652d6c7965a4619fb5c27a03
+  - https://huggingface.co/spaces/ArtificialAnalysis/LLM-Performance-Leaderboard
+- Ebedding Leaderboard
+  - https://huggingface.co/spaces/mteb/leaderboard
