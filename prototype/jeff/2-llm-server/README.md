@@ -35,7 +35,12 @@ Two technologies were examined:  llama-cpp-python and Ollama.
 
 ### [Llama-cpp-python](llama-cpp/README.md)
 
-The goal was to deploy of CUDA version of Llama-cpp-python in Docker.  However, some issues that "appear" to be in my docker environment and nuances of llama-cpp-python prevented creating a cuda enabled docker container.  I am working in the llama-cpp-python discussion section on github to find a resolution.
+Originally llama-cpp-python was investigated because it provides easy integration with Huggingface and is reported to run faster than Ollama.  The goal was to deploy of CUDA version of Llama-cpp-python in Docker.  With a lot of tweaking, I was finally able to get build a CUDA enabled docker image that was relatively small (5GB) vs the default size (13GB).
+
+For details on creating and starting 
+
+
+a However, some issues that "appear" to be in my docker environment and nuances of llama-cpp-python prevented creating a cuda enabled docker container.  I am working in the llama-cpp-python discussion section on github to find a resolution.
 
 Therefore, the rest of this discussion is halted mid-development until the CUDA docker solution is resolved.  Therefore the [llama-cpp-python investigation](llama-cpp/README.md) documentation may need refinement.
 
@@ -49,3 +54,6 @@ Ollama benefits and solutions:
 - There is a method to use almost any huggingface model with Ollama.  It just requires a Modelfile that defines the Template for the selected model.
 
 Ollama was chosen as the preferred server because it provides the best solution that fits within the short timeframe of this project.
+
+
+### [Ollma-WebUI / Open-WebUI](ollama-webui/README.md)

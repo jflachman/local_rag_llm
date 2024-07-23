@@ -1,0 +1,2 @@
+USE_MLOCK=0
+MODEL=/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf
