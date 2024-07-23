@@ -7,9 +7,18 @@
 
 ## General Notes:
 
-For files saved as safetensors, read the following: 
-- https://gist.github.com/AltAcc1812/0bc4b80838b49b6c3bdce9d94b66cb54
-- 
+Configure all the server and model settings in a `server.config` file.  
+
+**See** [Llama-cpp](../prototype/jeff/2-llm-server/llama-cpp/README.md) Section 6: Server Configuration using a `server.config` file
+
+- [Server Settings](https://llama-cpp-python.readthedocs.io/en/latest/server/#llama_cpp.server.settings.ServerSettings)
+  - [OpenAI Compatible Server](https://llama-cpp-python.readthedocs.io/en/latest/server/)
+  - [Server Options Reference](https://llama-cpp-python.readthedocs.io/en/latest/server/#server-options-reference)
+- [Model Settings](https://llama-cpp-python.readthedocs.io/en/latest/server/#llama_cpp.server.settings.ModelSettings)
+  - [Configuration and Multi-Model Support](https://llama-cpp-python.readthedocs.io/en/latest/server/#configuration-and-multi-model-support) - has a sample `server.config` and show how to configure/load multiple models.
+  - [Using Safetensors](https://gist.github.com/AltAcc1812/0bc4b80838b49b6c3bdce9d94b66cb54)
+
+
 
 ## Qwen (Large and Small Models)
 

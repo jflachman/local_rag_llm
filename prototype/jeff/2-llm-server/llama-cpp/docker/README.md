@@ -1,16 +1,68 @@
-# DOcker deployments
+# Llama-cpp-python Docker Image
 
-This discussion and files are from [Llama-cpp-python](https://github.com/abetlen/llama-cpp-python/docker)
+This discussion and files are from:
 
-**Summary:**  The goal was to deploy of CUDA docker version of Llama-cpp-python.  However, some issues that "appear" to be in my docker environment and nuances of llama-cpp-python prevented creating a cuda enabled docker container.  I am working in the llama-cpp-python discussion section on github to find a resolution.
+- [Llama-cpp-python](https://github.com/abetlen/llama-cpp-python/docker)
+- https://github.com/abetlen/llama-cpp-python/issues/1119
+- https://hub.docker.com/r/nvidia/cuda/
 
+## Pull (download) an image without CUDA GPU support
 
-### Install Docker Server
-> [!IMPORTANT]  
-> This was tested with Docker running on Linux. <br>If you can get it working on Windows or MacOS, please update this `README.md` with a PR!<br>
+## Build an image with CUDA GPU support
 
-[Install Docker Engine](https://docs.docker.com/engine/install)
+### Create a Dockerfile to build the image.
 
+The Dockerfile is used to build a llama-cpp.server docker image with CUDA GPU support.  The current state of the cuda-simple example in the References below did not work at the time of this effort.  In addition, after fixing the issues, the resulting image built with nvidia/cuda-devel image was 13GB.  Additional effort led to a smaller 5GB image.
+
+See my post concerning the results of this effort on the llama-cpp-python discussion here: [Building Dockerfile with CUDA support and smaller image](https://github.com/abetlen/llama-cpp-python/discussions/1609)
+
+The resulting Dockerfile builds in two stages.
+
+This will build in two stages
+1. **Stage 1:** The CUDA 'devel' base image will be used to build llama-cpp-python with CUDA support (~13GB image) This used the base image: `nvidia/cuda:12.1.1-devel-ubuntu22.04`
+2. **Stage 2:** The CUDA 'runtime' base image will then be used and the llama-cpp build from the devel image will be copied to the new runtime image (5GB final image)  This used the base image: `nvidia/cuda:12.1.1-runtime-ubuntu22.04`
+
+See the final [Dockerfile](Dockerfile) for more information
+
+### Build the Docker Image with CUDA support
+
+- **Prerequisite:** Docker Desktop installed on your computer
+
+Building the image is relatively simple.  From a terminal prompt, enter:
+
+**Generic** 
+
+    docker build -t <a name for your image> .
+
+**Example**
+
+    docker build -t llama-cpp-python:2.77-cuda .
+
+The text after the `:` is the tag.  The image will be called `llama-cpp-python` with a `tag` of `2.77-cuda`.  In this case I use the tag to say it is built using `llama-cpp-python` release `2.77` and it is built with `CUDA` support.  But you can name it anything that works for you.
+
+## Run the docker image
+
+**Generic**
+
+    docker run -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/<model name> -v <local direcctory on host>:/var/model <image name>
+
+**Example**
+
+    docker run -it -d -p 8100:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf -v C:/ML/DU/local_rag_llm/models:/var/model llama-cpp-python:2.77-cuda
+
+**Flags:**  There are several docker flags to set when starting the llama-cpp-python server.
+
+- `-v` Bind mount a volume.  I our case it mounts local directory `C:/ML/local_rag_llm/models` to container directory `/var/model`  Note that llama-cpp will look for models in /var/model
+- `-p` Publish a container's port(s) to the host.  In our case it exposes container port `8000` to localhost port `8100`
+- `-d` Run container in background and print container ID or in other words it runs container disconnected (returns to terminal prompt)
+- `--name` Assign a name to the container.  when omitted docker assigns a random name
+- `-e` Set environment variables
+- `-gpus=all` GPU devices to add to the container ('all' to pass all GPUs)
+- `--cap-add` Add Linux capabilities
+- `i` Keep STDIN open even if not attached
+- `t` Allocate a pseudo-TTY
+
+# References
 
 ## Simple Dockerfiles for building the llama-cpp-python server with external model bin files
 ### openblas_simple
