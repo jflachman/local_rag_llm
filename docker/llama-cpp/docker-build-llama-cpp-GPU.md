@@ -52,7 +52,8 @@ Goto: Docker hub: [jflachman/llama-cpp-python](https://hub.docker.com/repository
 2. You may pass and additional argument with a json file with server config settings.  Please see [Starting Llama-cpp.server](starting-llama-cpp.md)
    
 
-## [!NOTE] an alternate to llama-cpp-python is the base llama-cpp in docker
+[!NOTE] 
+## An alternate to llama-cpp-python is the base llama-cpp in docker
 
 However, this is not covered in this project.
 
