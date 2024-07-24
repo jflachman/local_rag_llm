@@ -5,6 +5,10 @@
  - [Technical Approach](docs/technical_approach.md)
  - [Technical Implementation](technical_implementation.md)
  - [Prototypes](Prototypes/README.md) developed in support of the Technical Approach & Implementation
+ - docker deployment
+   - [User Interface - Streamlit](docker/UI/README.md)
+   - [ChromaDB](docker/chromaDB/README.md)
+   - [llama-cpp-server](docker/llama-cpp/README.md)
  - Research, Trades and References
    - [Knowledge Documents](docs/knowledge_documents.md)
    - [User Interface](docs/user_interface.md)
