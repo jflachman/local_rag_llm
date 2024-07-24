@@ -46,7 +46,8 @@ If you need to modify the docker container, then see:
 2. [Create a custom Docker image with server.config](docker-build-llama-cpp-CPU.md)
 
 
-## [!NOTE] an alternate to llama-cpp-python is the base llama-cpp in docker
+[!NOTE] 
+## An alternate to llama-cpp-python is the base llama-cpp in docker
 
 However, this is not covered in this project.
 
