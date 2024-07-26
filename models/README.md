@@ -4,6 +4,12 @@
 
 ![B](imgs/qw_1-thumbnail.png)
 
+## Leaderboards
+
+- LLMs - https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard
+- Chatbot - https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard
+- Embeddings - https://huggingface.co/spaces/mteb/leaderboard
+- Code (CoPilot) https://huggingface.co/spaces/bigcode/bigcode-models-leaderboard
 
 ## General Notes:
 

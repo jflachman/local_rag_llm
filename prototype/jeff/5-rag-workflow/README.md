@@ -20,19 +20,25 @@
 2. Move rag workflow to a python
 3. Add UI from step *4. User Interface* (without dockerfile)
 
-## Build a workflow in Jupyter notebook
 
+## Technologies used
+
+- Vector Database - [ChromaDB](../../../docker/chromaDB/README.md)
+- LLM Server - [Llama-cpp-python](../../../docker/llama-cpp/README.md)
+- User Interface - [Streamlit](../../../docker/Streamlit/README.md)
+- RAG Workflow - [Lanchain](langchain/README.md)
+
+
+## Build a workflow in Jupyter notebook
 
 **TBD**
 
+
 ## Build a RAG workflow in python file
-
-
 
 **TBD**
 
 
 ## Build a RAG workflow with UI in python (without docker)
-
 
 **TBD**

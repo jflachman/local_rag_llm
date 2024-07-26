@@ -15,7 +15,7 @@
 
 The [CUDA enabled docker container](docker-build-llama-cpp-GPU.md) is built to allow an server.conf file to be passed when starting up the container.  A [CPU only image](docker-build-llama-cpp-cpu.md) is also available.  A good place to put this file is in the `/var/models` directory.  See the default [server.config](server.config) file there.  The file name is arbitrary.  So you could use `best_models.conf` for example.
 
-    run -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -v C:/ML/DU/local_rag_llm/models:/var/model  jflachman/llama-cpp-python:v0.2.77-cuda /var/model/server.config
+    docker run -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -v C:/ML/DU/local_rag_llm/models:/var/model  jflachman/llama-cpp-python:v0.2.77-cuda /var/model/server.config
 
 For more information on parameters for configuring the server see:
 
@@ -25,12 +25,27 @@ For more information on parameters for configuring the server see:
 
 
 
-### 2. Encryption & Authentication
+## 2. Encryption & Authentication
 
 **Encryption** is accomplished by setting the `ssl_keyfile` and the `ssl_certificate`.  There are many ways to generate these.  A google search should provide some.
 
+Example: [How to generate a self-signed SSL certificate using OpenSSL](https://stackoverflow.com/questions/10175812/how-to-generate-a-self-signed-ssl-certificate-using-openssl)
+
+This code will create `cert.pem` and `key.pem` files in the current directory.
+
+        # interactive
+        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365
+
+        # non-interactive and 10 years expiration
+        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=StateName/L=CityName/O=CompanyName/OU=CompanySectionName/CN=CommonNameOrHostname"
+
+
+## 3. Authentication
+
 **Authentication** can be accomplished with an `API_KEY`.  All authentication requests use this key.  This is typically a secret shared between the UI application and the LLM server.
 
+
+## 4. References
 
 **References**
 - https://llama-cpp-python.readthedocs.io/en/latest/server/#llama_cpp.server.settings.ServerSettings

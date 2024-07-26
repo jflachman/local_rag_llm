@@ -17,13 +17,7 @@ Once your server is running (given you are using port `8100`), you may access it
 
 ## Using the server from your code
 
-See this sample Jupyter Notebook to access the server for examples using the server.
 
-- See the [Llama-cpp-python examples](https://github.com/abetlen/llama-cpp-python/tree/main/examples) for uses of the OpenAPI interface to web server.
-- [gradio_chat](https://github.com/abetlen/llama-cpp-python/tree/main/examples/gradio_chat)
-- [high_level_API](https://github.com/abetlen/llama-cpp-python/tree/main/examples/high_level_api)
-- [notebooks/multimodal.ipynb](https://github.com/abetlen/llama-cpp-python/tree/main/examples/notebooks)
-- [ray](https://github.com/abetlen/llama-cpp-python/tree/main/examples/ray) README for curl command.
 
 
 
