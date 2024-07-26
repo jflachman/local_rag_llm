@@ -1,0 +1,6 @@
+
+docker run -it -d --name chromaDB -p 8200:8000 -e IS_PERSISTENT=TRUE -e ANONYMIZED_TELEMETRY=TRUE -v /ML/DU/local_rag_llm/db:/chroma/chroma chromadb/chroma:latest
+docker run -it -d --name Llama-cpp -p 8100:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf -v /c/ML/DU/local_rag_llm/models:/var/model jflachman/llama-cpp-python:v0.2.77-cuda
+docker run -it -d --name Local_RAG -p 8501:8501 jflachman/local_rag:v0.1
+
+
