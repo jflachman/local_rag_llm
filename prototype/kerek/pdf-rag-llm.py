@@ -12,6 +12,9 @@ from langchain.chains import create_retrieval_chain
 
 from langchain_core.prompts import ChatPromptTemplate
 
+#I need to initalize this. It connects to streamlit but doesn't work. 
+if 'key' not in st.session_state:
+    st.session_state['key'] = 'value'
 
 ## Groq api key
 groq_api_key = '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'
@@ -33,6 +36,14 @@ Questions:{input}
 
 """
 )
+
+def initialize_session_state():
+    if 'vectors' not in st.session_state:
+        st.session_state.vectors = []
+    
+#initialize session_state on app startup
+initialize_session_state()
+
 
 def vector_embedding():
 
@@ -57,7 +68,7 @@ if prompt1:
     start = time.process_time()
     document_chain = create_stuff_documents_chain(llm,prompt) 
     retriever = st.session_state.vectors.as_retriever()
-    retrieval_chain = create_retrieval_chain(retriever,document_chain)
+    retrieval_chain = langchain.chains.retrieval.create_retrieval_chain(retriever,document_chain)
     response = retrieval_chain.invoke({'input':prompt1})
 
     print("Response Time :" ,time.process_time()-start)
