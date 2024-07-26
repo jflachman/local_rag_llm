@@ -1,0 +1,44 @@
+name: local_rag
+services:
+    chroma:
+        stdin_open: true
+        tty: true
+        container_name: chromaDB
+        ports:
+            - 8200:8000
+        environment:
+            - IS_PERSISTENT=TRUE
+            - ANONYMIZED_TELEMETRY=TRUE
+        volumes:
+            - /ML/DU/local_rag_llm/db:/chroma/chroma
+        image: chromadb/chroma:latest
+    llama-cpp-python:
+        stdin_open: true
+        tty: true
+        container_name: Llama-cpp
+        ports:
+            - 8100:8000
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities:
+                              - gpu
+        cap_add:
+            - SYS_RESOURCE
+        environment:
+            - USE_MLOCK=0
+            - CONFIG_FILE=/var/model/server.config
+#            - MODEL=/var/model/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf
+        volumes:
+            - /c/ML/DU/local_rag_llm/models:/var/model
+        image: jflachman/llama-cpp-python:v0.2.77-cuda
+    # local_rag:
+    #     stdin_open: true
+    #     tty: true
+    #     container_name: Local_RAG
+    #     ports:
+    #         - 8501:8501
+    #     image: jflachman/local_rag:v0.1
