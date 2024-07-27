@@ -1,0 +1,52 @@
+name: local_rag
+services:
+    chroma:
+        stdin_open: true
+        tty: true
+        container_name: chromaDB
+        ports:  # Host : Container - port for ChromaDB (don't need to change)
+            - 8200:8000
+        environment:  # Don't need to change environment variables
+            - IS_PERSISTENT=TRUE
+            - ANONYMIZED_TELEMETRY=TRUE
+        volumes:  # --------- Change to the abolute path to the db directory on your host machine --------------
+            - /ML/DU/local_rag_llm/db:/chroma/chroma
+        image: chromadb/chroma:latest
+    llama-cpp-python:
+        stdin_open: true
+        tty: true
+        container_name: Llama-cpp
+        ports:  # Host : Container - port for llama-cpp server (don't need to change)
+            - 8100:8000
+        # Use deploy section if you are running llama-cpp-python cuda image.
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities:
+                              - gpu
+        cap_add:
+            - SYS_RESOURCE
+        environment:   # --------- Do not change USE_MLOCK
+            - USE_MLOCK=0
+            # ------------ Either use the config file to specify your LLM model or the           --------------
+            # ------------     model environment variable.  Comment one and uncomment the other. --------------
+            - CONFIG_FILE=/var/model/server.config
+#            - MODEL=/var/model/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf
+        volumes:  # --------- Change to the abolute path to the models directory on your host machine --------------
+                  # ---------    You model_name.guff file should be saved in the folder or subfoler.
+            - /c/ML/DU/local_rag_llm/models:/var/model
+            # --------- Pick one llama-cpp-python image to use.  Comment out the other ---------
+        # GPU Version
+        image: jflachman/llama-cpp-python:v0.2.77-cuda
+        # CPU Version
+        #image: ghcr.io/abetlen/llama-cpp-python
+    # local_rag:
+    #     stdin_open: true
+    #     tty: true
+    #     container_name: Local_RAG
+    #     ports:
+    #         - 8501:8501
+    #     image: jflachman/local_rag:v0.1
