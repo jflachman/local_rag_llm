@@ -15,6 +15,18 @@
 
 # LLM Server Investigation - llama-cpp-python
 
+**Llama-cpp Table of Contents:**
+1. llama-cpp-python example:
+2. Using Stock Docker Image
+3. Create a custom Docker image with CUDA support
+4. Run the docker image with CUDA support
+5. **Using Llama-cpp server**
+6. Server Configuration using a `server.conf` file
+7. Encryption & Authentication
+8. References
+
+
+
 ## **Summary**
 The goal was to deploy of CUDA docker version of Llama-cpp-python.  However, some issues that "appear" to be in my docker environment and nuances of llama-cpp-python prevented creating a cuda enabled docker container.  I am working in the llama-cpp-python discussion section on github to find a resolution.
 
@@ -32,9 +44,7 @@ Steps:
     - CUDA GPU support
     - OpenAI compliant API
 
-**Step 3 is TBD**
-
-Note:  Local path to models for docker on WSL is:  `C:/ML/DU/local_rag_llm/models`.  Also, `/home/user/rag_llm` is a softlink to `/mnt/c/ML/CU/local_rag_llm`
+Note:  Local path to models for docker on WSL used in the examples a windows directory:  `C:/ML/DU/local_rag_llm/models`.  Also, `/home/user/rag_llm` is a softlink to `/mnt/c/ML/CU/local_rag_llm`
 
 ## 1. llama-cpp-python example:
 
@@ -42,9 +52,19 @@ Ran example from sunny2309: [Llama CPP Turorial](llama-cpp-tutorial.ipynb)
 
 - Ran perfectly with modifications for local llm `/home/user/rag_llm/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf`.  made this a variable llm_model.
 
-## 2. Stock Docker Container
+## 2. Using Stock Docker Image
 
-Tried out available docker image:
+Tried out the docker image created by the team at [llama-cpp-python](https://github.com/abetlen/llama-cpp-python):
+
+- Pull the latest image:
+
+      docker pull ghcr.io/abetlen/llama-cpp-python:latest
+
+- To pull a specific image such as v0.2.79 use:
+
+      docker pull ghcr.io/abetlen/llama-cpp-python:v0.2.79
+
+- Remember to use the same `tag` of v0.2.79 on the following docker run if you pull that version. 
 
 - **generic**
 
@@ -56,70 +76,105 @@ Tried out available docker image:
 
 - **Your parameters:**
 
-  - Try the my parameters version above, but modify `C:/ML/DU/local_rag_llm/db` to the location of the database on you local directory.
-
-## 3. Create a custom image with CUDA support
-
-A simple [docker file](https://github.com/abetlen/llama-cpp-python/tree/main/docker/cuda_simple) is available from llama-cpp-python.  This is the source of the Dockerfile included in this investigation.
-
-This dockerfile uses a base linux image with CUDA already installed from Nvidia with these lines in the DOckerfile:
-
-    ARG CUDA_IMAGE="12.5.0-devel-ubuntu22.04"
-    FROM nvidia/cuda:${CUDA_IMAGE}
-
-**Note:**  The stock [Dockerfile](https://github.com/abetlen/llama-cpp-python/tree/main/docker/cuda_simple) was modified to use the following llama-cpp-python pip install.  Without this update to point to the whl file, the build failed.  The Nvidia CUDA base image uses CUDA 12.5 while the whl file uses 12.4 (the latest whl currently available: cu124).  CUDA is backward compatible, so llama-cpp-python with 12.4 support will work with CUDA 12.5.
-
-    RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install --no-cache-dir llama-cpp-python==0.2.79 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
-
-After making this one change, the Dockerfile build completed successfully
+  - Try the my parameters version above, but modify `C:/ML/DU/local_rag_llm/models` to the location of the database on you local directory.  You may also have a different Model downloaded.  So enter the path to that model from your local directory.
+    - Therefore, if you model is in `C:/ML/DU/local_rag_llm/models/qwen2_500m` and the model name is `qwen2-0_5b-instruct-q5_k_m.gguf`, then use:  `-e MODEL=/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf`
 
 
-### 3a. Build the image with CUDA support
+## 3. Create a custom Docker image with CUDA support
 
-To build the docker image with cuda support.
+The [Dockerfile](docker/Dockerfile) is used to build a llama-cpp.server docker image with CUDA GPU support.  The current state of the [cuda-simple](https://github.com/abetlen/llama-cpp-python/tree/main/docker/cuda_simple) example from [llama-cpp-python](https://github.com/abetlen/llama-cpp-python/) did not work at the time of this effort.  In addition, after fixing the issues to make it work, the resulting image built with nvidia/cuda-devel image was 13GB.  Additional effort led to a smaller 5GB image.  This is created using the `Dockerfile` in the [docker directory](docker).
 
-1. Navigate to this directory `2-llm-server`
-2. run:
+### Build the image with CUDA support
 
-        docker build -t llama-cpp-python-cuda .
+- **Prerequisite:** Docker Desktop installed on your computer
 
-### 3b. Startup a container with the new image
+Building the image is relatively simple.  From a terminal prompt, enter:
 
-- **Generic**
+**Generic** 
 
-      docker run  --rm -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/<model-path> -v <model-root-path>:/var/model llama-cpp-python-cuda
+    docker build -t <a name for your image> .
 
-- **My Parameters**
+**Example**
 
-      docker run  --rm -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/models/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf -v C:/ML/DU/local_rag_llm/models:/var/model llama-cpp-python-cuda
+    docker build -t llama-cpp-python:2.77-cuda .
 
-### 3b.1.  Startup with an environment file
+The text after the `:` is the tag.  The image will be called `llama-cpp-python` with a `tag` of `2.77-cuda`.  In this case I use the tag to say it is built using `llama-cpp-python` release `2.77` and it is built with `CUDA` support.  But you can name it anything that works for you.
 
-You can also create a `.llama_cpp_env` file setting the required environment variables and pass it to the Docker container with the `--env-file` flag when running the container.  This will be useful when adding authentication.
+## 4. Run the docker image with CUDA support
 
-- **Generic**
+**Generic**
 
-      docker run  --rm -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/<model-path> -v <model-root-path>:/var/model llama-cpp-python-cuda
+    docker run -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/<model name> -v <local direcctory on host>:/var/model <image name>
 
-- **My Parameters**
+**Example**
 
-      docker run  --rm -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE --env-file ./.llama_cpp_env -v C:/ML/DU/local_rag_llm/models:/var/model llama-cpp-python-cuda
+    docker run -it -d -p 8100:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -e MODEL=/var/model/qwen2_500m/qwen2-0_5b-instruct-q5_k_m.gguf -v C:/ML/DU/local_rag_llm/models:/var/model llama-cpp-python:2.77-cuda
 
-Note:  `--cap-add SYS_RESOURCE` Overrides resource Limits.
+**Flags:**  There are several docker flags to set when starting the llama-cpp-python server.
 
+- `-v` Bind mount a volume.  I our case it mounts local directory `C:/ML/local_rag_llm/models` to container directory `/var/model`  Note that llama-cpp will look for models in /var/model
+- `-p` Publish a container's port(s) to the host.  In our case it exposes container port `8000` to localhost port `8100`
+- `-d` Run container in background and print container ID or in other words it runs container disconnected (returns to terminal prompt)
+- `--name` Assign a name to the container.  when omitted docker assigns a random name
+- `-e` Set environment variables
+- `-gpus=all` GPU devices to add to the container ('all' to pass all GPUs)
+- `--cap-add` Add Linux capabilities
+- `i` Keep STDIN open even if not attached
+- `t` Allocate a pseudo-TTY
+
+### 4.1.  ALTERNATE: Run the CUDA docker image with an environment file
+
+You can also create a `.llama_cpp_env` file setting the required environment variables and pass it to the Docker container with the `--env-file` flag when running the container.  This can simplify your `docker run` command
 
 - **.llama_cpp_env** file contents (filename is arbitrary)
 
         USE_MLOCK=0
-        MODEL=/var/model/<model-path>
+        MODEL=/var/model/<model-path>/<model_file>
 
-### 4. Authentication
+- using .llama_cpp_file
+  
+      docker run  --rm -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE --env-file ./.llama_cpp_env -v C:/ML/DU/local_rag_llm/models:/var/model llama-cpp-python-cuda
+
+
+## 5. Using Llama-cpp server.
+
+Once your server is running, you may access it here:  http://localhost:8100/docs
 
 **References**
-- See Authentication in https://github.com/abetlen/llama-cpp-python/blob/main/llama_cpp/server/settings.py
-- See Changelog 0.2.25: https://github.com/abetlen/llama-cpp-python/blob/main/CHANGELOG.md
 
-Server settings used to configure the FastAPI and Uvicorn server:
+- https://llama-cpp-python.readthedocs.io/en/latest/
+- API: from local docker: http://localhost:8100/docs
+- [API Reference](https://llama-cpp-python.readthedocs.io/en/latest/api-reference/)
+
+
+
+
+
+
+## 6. Server Configuration using a `server.config` file
+
+The CUDA enabled docker container from `Section 3: Create a custom Docker image with CUDA support` is built to allow an server.conf file to be passed when starting up the container.  A good place to put this file is in the `/var/models` directory.  See the default [server.config](../../../../models/server.config) file there.  The file name is arbitrary.  So you could use `best_models.conf` for example.
+
+    run -it -d -p 8000:8000 --gpus=all --cap-add SYS_RESOURCE -e USE_MLOCK=0 -v C:/ML/DU/local_rag_llm/models:/var/model  jflachman/llama-cpp-python:v0.2.77-cuda /var/model/server.config
+
+For more information on parameters for configuring the server see:
+
+- [Server Options Reference](https://llama-cpp-python.readthedocs.io/en/latest/server/#server-options-reference)
+- [Configuration and Multi-Model Support](https://llama-cpp-python.readthedocs.io/en/latest/server/#configuration-and-multi-model-support) - has a sample `server.config` and show how to configure/load multiple models.
+- https://llama-cpp-python.readthedocs.io/en/latest/server/
+
+
+### 7. Encryption & Authentication
+
+**Encryption** is accomplished by setting the `ssl_keyfile` and the `ssl_certificate`.  There are many ways to generate these.  A google search should provide some.
+
+**Authentication** can be accomplished with an `API_KEY`.  All authentication requests use this key.  This is typically a secret shared between the UI application and the LLM server.
+
+
+**References**
+- https://llama-cpp-python.readthedocs.io/en/latest/server/#llama_cpp.server.settings.ServerSettings
+
+**Server settings** used to configure the FastAPI and Uvicorn server:
 
 - `host`: str = Field(default="localhost", description="Listen address")
 - `port`: int = Field(default=8000, description="Listen port")
@@ -133,20 +188,21 @@ Server settings used to configure the FastAPI and Uvicorn server:
 
 
 
-### 3c. Test
-
--   Verify GPU support
-
-        from llama_cpp import Llama
-        llm = Llama(model_path="./llama-2-7b/ggml-model-f16.gguf", n_gpu_layers=-1)
-
-**TBD**
-
-
-
-## 4. References
+## 8. References
 
 - https://llama-cpp-python.readthedocs.io/en/latest/
 - https://github.com/abetlen/llama-cpp-python
 - API: from local docker: http://localhost:8100/docs
 - [API Reference](https://llama-cpp-python.readthedocs.io/en/latest/api-reference/)
+
+
+### 8.1 Typical Model Sizes
+
+
+| Model |  Quantized size |
+|------:|----------------:|
+|    3B |            3 GB |
+|    7B |            5 GB |
+|   13B |           10 GB |
+|   33B |           25 GB |
+|   65B |           50 GB |
