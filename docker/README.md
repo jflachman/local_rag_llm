@@ -78,7 +78,7 @@ Run these commands while in the directory with your `compose.yml` file.
 
 - Startup All three containers
 
-      docker compose up --detach
+      docker compose up -d
 
 - Shutdown all three containers
 

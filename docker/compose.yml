@@ -18,7 +18,7 @@ services:
         container_name: Llama-cpp
         ports:  # Host : Container - port for llama-cpp server (don't need to change)
             - 8100:8000
-        # Use deploy section if you are running llama-cpp-python cuda image.
+        # -------- Use deploy section if you are running llama-cpp-python CUDA image.
         deploy:
             resources:
                 reservations:
