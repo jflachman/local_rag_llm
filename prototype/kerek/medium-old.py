@@ -109,8 +109,6 @@ generate_data_store()
 
 
 query_text = st.chat_input()
-if not isinstance(query_text, str):
-        query_text = str(query_text)
 
 
 PROMPT_TEMPLATE = """
@@ -182,3 +180,5 @@ def main():
 if __name__ == "__main__":
     load_dotenv()
     main()
+
+
