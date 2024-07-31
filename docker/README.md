@@ -49,7 +49,10 @@ The solution is deployed as `3 docker containers`.  This makes it easy to deploy
 
 - Pull the Llama-cpp Container
 
+      # GPU Verison (~5GB)
       docker pull jflachman/llama-cpp-python:v0.2.77-cuda
+      # CPU Version (~1.8GB)
+      docker pull ghcr.io/abetlen/llama-cpp-python
 
 - Pull the Local-RAG Container **(Not yet available)**
 
@@ -75,7 +78,7 @@ Run these commands while in the directory with your `compose.yml` file.
 
 - Startup All three containers
 
-      docker compose up --detach
+      docker compose up -d
 
 - Shutdown all three containers
 
