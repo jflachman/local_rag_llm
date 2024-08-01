@@ -14,6 +14,8 @@ import streamlit as st
 # Load environment variables from a .env file
 load_dotenv()
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
 #openai_api_key = ''
 
 # Directory to your pdf files:
