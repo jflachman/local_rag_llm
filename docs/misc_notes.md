@@ -14,6 +14,16 @@
    - [Other Notes](misc_notes.md)
    - [References](references.md)
 
+## RAG Prompting
+
+Creating the Prompts for a Retrieval Augmented Generation (RAG) is complex.  There is a very good discussion here:
+
+- https://community.openai.com/t/prompt-engineering-for-rag/621495/16
+- https://www.promptingguide.ai/research/rag
+- https://help.openai.com/en/articles/8868588-retrieval-augmented-generation-rag-and-semantic-search-for-gpts
+- https://platform.openai.com/docs/guides/chat-completions
+- Great Example using our technologies: https://github.com/Quad-AI/LLM
+- 
 
 ## PrivateGPT
 
