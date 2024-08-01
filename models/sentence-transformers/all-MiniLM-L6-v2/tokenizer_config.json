@@ -47,7 +47,7 @@
   "do_lower_case": true,
   "mask_token": "[MASK]",
   "max_length": 128,
-  "model_max_length": 512,
+  "model_max_length": 256,
   "never_split": null,
   "pad_to_multiple_of": null,
   "pad_token": "[PAD]",

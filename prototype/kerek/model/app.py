@@ -27,11 +27,9 @@ st.set_page_config(
     page_title = "Local RAG llm",
     layout='wide')
 
-
 query_text = st.chat_input()
 if not isinstance(query_text, str):
         query_text = str(query_text)
-
 
 PROMPT_TEMPLATE = """
 Answer the question based only on the following context:
@@ -39,7 +37,6 @@ Answer the question based only on the following context:
  - -
 Answer the question based on the above context: {question}
 """
-
 
 # #Trying to create the input function for Streamlit 
 def user_input(query_text):
@@ -91,6 +88,10 @@ def query_rag(query_text):
   # Format and return response including generated text and sources
   formatted_response = f"Response: {response_text}\nSources: {sources}"
   return formatted_response, response_text
+
+
+
+
 
 # # Let's call our function we have defined
 formatted_response, response_text = query_rag(query_text)
