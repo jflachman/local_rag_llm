@@ -27,6 +27,8 @@ st.set_page_config(
     page_title = "Local RAG llm",
     layout='wide')
 
+#This commented out line switches the user input. It might be useful. 
+#query_text = st.text_input("Enter your query here:")
 query_text = st.chat_input()
 if not isinstance(query_text, str):
         query_text = str(query_text)
@@ -100,8 +102,6 @@ formatted_response, response_text = query_rag(query_text)
 
 
 
-
-
 def main():
     st.header("Local RAG llm")
     #Make sure this is a string.
@@ -110,6 +110,7 @@ def main():
     #     query_text = str(query_text)
 
     st.write(response_text)
+
 
 if __name__ == "__main__":
     load_dotenv()
