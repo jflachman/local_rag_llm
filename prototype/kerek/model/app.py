@@ -10,13 +10,13 @@ from langchain.chat_models import ChatOpenAI # Import OpenAI LLM
 import os # Importing os module for operating system functionalities
 import shutil # Importing shutil module for high-level file operations
 import streamlit as st
+from dotenv import load_dotenv
+import os
 
 # Load environment variables from a .env file
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-#openai_api_key = ''
 
 # Directory to your pdf files:
 DATA_PATH = "../data"
