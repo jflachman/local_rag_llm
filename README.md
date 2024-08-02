@@ -1,10 +1,12 @@
 ## Table of Contents
 
  - [README](README.md)
+ - **[How to Run this RAG solution](run/README.md)**
  - [Project Proposal](docs/project_proposal.md)
  - [Technical Approach](docs/technical_approach.md)
  - [Technical Implementation](technical_implementation.md)
- - [Prototypes](Prototypes/README.md) developed in support of the Technical Approach & Implementation
+ - [Project Brief](Presentation_Final_Project_Group_4.pdf)
+ - [Prototypes](prototype/README.md) developed in support of the Technical Approach & Implementation
  - docker deployment
    - [User Interface - Streamlit](docker/UI/README.md)
    - [ChromaDB](docker/chromaDB/README.md)

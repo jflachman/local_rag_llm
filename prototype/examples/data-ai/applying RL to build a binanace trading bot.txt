@@ -1,0 +1,327 @@
+Our objective is to make a trading bot that trade cryptocurrency using state-of the-art reinforcment learning. To create our RL agents we will use the following technologies:
+
+Python
+Reinforcment Learning
+OPenAI gym
+Binance
+You don’t need any background in ML to understand the following articles, knowledge of Python will be enough. However, if a part is unclear do not hesitate to contact me.
+
+Here are the different parts of the creation of our bot, each part will be one article:
+
+We will use Binance data to generate our data that we will customize for our need. All you need is a Binance account, you can create one by clicking here. It is free and one of best trading platform to find cryptocurrency data.
+
+All of the code for this article will be available on my GitHub.
+
+Steps for generating data:
+
+Add our Binance API keys
+Pulling data from Binance
+Standardize our data as we wish
+Save it in a csv file
+Add our Binance API keys
+After cloning the repository, we will need to add our binance keys. We can generate them on the Binance site. Then we just have to add them to keys.py.
+
+apiKey = “”
+secretKey = “”
+After the adding:
+
+apiKey = “glebfxHdBtDR3RWt3hVRtHmvQaYduT3WodIRdKCOg51qwQsRWbn3aeS298GINGaM”
+secretKey = “NSBJOldWu9xXARDCcJRdQ5C0uVth3Qx5bY4y9YyKJubvz7HPcbJL3Racao9xEo1o”
+That’s it ! We are connected to the API.
+
+Pulling data from Binance
+For all the steps below we will works on main.py.
+The first step is to import a bunch of things that you may be familiar with, we will explain them after:
+
+from binance.client import Client
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from matplotlib import pyplot
+import pandas as pd
+import keys
+import os
+In our case we want BTCUSDT (Bitcoin/Tether) but this script can create data for any pair available on Binance. We want the data since 2 year ago, but we can change this if wanted. The data will be for every minutes so it’s approximately 1 million rows of data.
+
+#Changes these values to obtain the desired csv
+pair = os.getenv(“PAIR”, “BTCUSDT”)
+since = os.getenv(“SINCE”, “2 year ago UTC”)
+To connect to our Binance account we use Client(apikey, secretkey), then we will have our dataframe df that we could work on.
+
+#Connect to the Binance client
+client = Client(keys.apiKey, keys.secretKey)
+# Get the data from Binance
+df = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, since)
+We want to normalize our data (make him between 0 and 1). However we still want to know the “Real Open” and the “Real CLose” it will be usefull to evaluate our bot.
+
+# Store the open and close values in a pandas dataframe
+real_values = []
+for i in df:
+    real_values.append([i[1], i[3]])
+real_df = pd.DataFrame(real_values, columns=[“Real open”, “Real close”])
+Normalizing data is easy with sklearn, after this all our data are between 0 and 1, exept for the Real Open and the Real Close of course.
+
+# Normalize the data
+normalizer = MinMaxScaler().fit(df)
+df = normalizer.transform(df)
+We then transform our data to a pandas array and drop useless columns “Open Time”, “Close Time” and “Ignore”.
+
+# Transform the data to a pandas array
+df = pd.DataFrame(df,
+columns=[
+“Open time”, “Open”, “High”, “Low”, “Close”, “Volume”,
+“Close time”, “Quote asset volume”, “Number of trades”,
+“Taker buy base asset volume”,
+“Taker buy quote asset volume”, “Ignore”
+])
+# Drop useless columns
+df.drop([“Open time”, “Close time”, “Ignore”], axis=1, inplace=True)
+Plot the data ! It will give us a good idea if our generation is successful.
+
+#Plot the data
+df.plot()
+We then add our 2 dataframes. We also need to drop the last timesteps, because it is possibly not finished.
+
+# Add the real open and the real close to df
+df = pd.concat([df, real_df], axis=1)
+# Remove the last timestep
+df = df[:-1]
+Our csv file will be in our folder datafile and at the end we will show the plot.
+
+# Add to the csv file
+df.to_csv(“datafile/” + pair + “.csv”)
+#Show the plot
+pyplot.show()
+Test our script
+Running can take a bit of time, for 2 years of data I needed 15 minutes.
+
+Running main.py give us a plot:
+
+
+But above all it gives us a precious csv file in the folder datafile that we will use for our trading agent.
+
+OpenAI’s gym is by far the best packages to create a custom reinforcement learning environment. It comes with some pre-built environnments, but it also allow us to create complex custom environments. An environment contains all the necessary functionality to run an agent and allow it to learn.
+
+Our goal is to recreate Binance with the same fees, the same data, and let our agent learn from these. If you do not have a Binance account you can create one by clicking here. A common mistake is to make environments who do not match reality and are to easy for our agents to learn, it’s what we will try to avoid here.
+
+It’s really hard to make money on the stock market/cryptocurrency market. If our bot make +10% per month, it’s probably not sustainable or just pure luck. Being able to trade and keeping our money with paying our fees is already really impressive, let’s do our best !
+
+All of the code for this article is available on my GitHub.
+
+The custom environment
+First let import what we will need for our env, we will explain them after:
+
+import matplotlib.pyplot as plt
+import numpy as np
+import gym
+import random
+from gym import spaces
+import static
+A custom environment is a class that inherits from gym.env.
+
+class CryptoEnv(gym.Env):
+def __init__(self, df, title=None):
+self.df = df
+self.reward_range = (-static.MAX_ACCOUNT_BALANCE,
+static.MAX_ACCOUNT_BALANCE)
+self.total_fees = 0
+self.total_volume_traded = 0
+self.crypto_held = 0
+self.bnb_usdt_held = static.BNBUSDTHELD
+self.bnb_usdt_held_start = static.BNBUSDTHELD
+self.episode = 1
+# Graph to render
+self.graph_reward = []
+self.graph_profit = []
+self.graph_benchmark = []
+# Action space from -1 to 1, -1 is short, 1 is buy
+self.action_space = spaces.Box(low=-1,
+high=1,
+shape=(1, ),
+dtype=np.float16)
+# Observation space contains only the actual price for the     moment
+self.observation_space = spaces.Box(low=0,
+high=1,
+shape=(10, 5),
+dtype=np.float16)
+df : The dataframe that we have created in the past article
+
+reward_range : Not really usefull but needed, let’s make it be between 2 huge numbers (static is the file where we stored all of our constants). Let’s make it between -10 millions and +10 millions.
+
+total_fees : Keep track of the total fees paid
+
+total_volumes_traded : Keep track of the the total trading volume
+
+crypto_held : Keep track of the crypto held (Bitcoin in our case)
+
+bnb_usdt_held, bnb_usdt_start : To track our USDT ( We can easily change the pair)
+
+episode : The number of our current episode (start at 1)
+
+graph_reward, graph_profit, graph_benchmark are used to render the result.
+
+action_space : We set our action space between -1 and 1. 1 means using 100% of our USDT to buy BTC, 0 means doing nothing, -1 means selling all of our BTC for USDT.
+
+The method reset()
+def reset(self):
+self.balance = static.INITIAL_ACCOUNT_BALANCE
+self.net_worth = static.INITIAL_ACCOUNT_BALANCE + static.BNBUSDTHELD
+self.max_net_worth = static.INITIAL_ACCOUNT_BALANCE
+static.BNBUSDTHELD
+self.total_fees = 0
+self.total_volume_traded = 0
+self.crypto_held = 0
+self.bnb_usdt_held = static.BNBUSDTHELD
+self.episode_reward = 0
+# Set the current step to a random point within the data frame
+# Weights of the current step follow the square function
+start = list(range(4, len(self.df.loc[:, ‘Open’].values) —    static.MAX_STEPS)) + self.df.index[0]
+weights = [i for i in start]
+self.current_step = random.choices(start, weights)[0]
+self.start_step = self.current_step
+return self._next_observation()
+We decide to start our current_step to a random point in our dataframe. But not totally random, we choose it so that the older the data the least it is choosed at a starting point. Make sense right ? What append yesterday has more impact then what append 2 years ago.
+
+The method _next_observation_()
+def _next_observation(self):
+# Get the data for the last 5 timestep
+frame = np.array([
+self.df.loc[self.current_step — 4:self.current_step, ‘Open’],
+self.df.loc[self.current_step — 4:self.current_step, ‘High’],
+self.df.loc[self.current_step — 4:self.current_step, ‘Low’],
+self.df.loc[self.current_step — 4:self.current_step, ‘Close’],
+self.df.loc[self.current_step — 4:self.current_step, ‘Volume’],
+self.df.loc[self.current_step -
+4:self.current_step, ‘Quote asset volume’],
+self.df.loc[self.current_step -
+4:self.current_step, ‘Number of trades’],
+self.df.loc[self.current_step -
+4:self.current_step, ‘Taker buy base asset volume’],
+self.df.loc[self.current_step -
+4:self.current_step, ‘Taker buy quote asset volume’]
+])
+# We append additional data
+obs = np.append(frame, [[self.balance /  static.MAX_ACCOUNT_BALANCE,
+self.net_worth / self.max_net_worth,
+self.crypto_held / static.MAX_CRYPTO,
+self.bnb_usdt_held / self.bnb_usdt_held_start,
+0]],
+axis=0)
+return obs
+We take here the data we want our agent to know before making the decision to buy or sell. We decide to give the 5 last timeframes, so our agent will know the Open of the last 5 timesteps (he will also know other things like the Close, the Volume,…). We also pass him our current balance, net worth and the amount of crypto held.
+
+
+The method _take_action()
+def _take_action(self, action):
+# Set the current price to a random price between open and close
+current_price = random.uniform(
+self.df.loc[self.current_step, ‘Real open’],
+self.df.loc[self.current_step, ‘Real close’])
+if action[0] > 0:
+# Buy
+crypto_bought = self.balance * action[0] / current_price
+self.bnb_usdt_held -= crypto_bought * current_price *  static.MAKER_FEE
+self.total_fees += crypto_bought * current_price * static.MAKER_FEE
+self.total_volume_traded += crypto_bought * current_price
+self.balance -= crypto_bought * current_price
+self.crypto_held += crypto_bought
+if action[0] < 0:
+# Sell
+crypto_sold = -self.crypto_held * action[0]
+self.bnb_usdt_held -= crypto_sold * current_price * static.TAKER_FEE
+self.total_fees += crypto_sold * current_price * static.TAKER_FEE
+self.total_volume_traded += crypto_sold * current_price
+self.balance += crypto_sold * current_price
+self.crypto_held -= crypto_sold
+self.net_worth = self.balance + self.crypto_held * current_price + self.bnb_usdt_held
+if self.net_worth > self.max_net_worth:
+self.max_net_worth = self.net_worth
+This method make us buy or sell depending on the action taken and calculate the new net_worth.
+
+The metod step()
+def step(self, action, end=True):
+# Execute one time step within the environment
+self._take_action(action)
+self.current_step += 1
+# Calculus of the reward
+profit = self.net_worth — (static.INITIAL_ACCOUNT_BALANCE +
+static.BNBUSDTHELD)
+profit_percent = profit / (static.INITIAL_ACCOUNT_BALANCE +
+static.BNBUSDTHELD) * 100
+benchmark_profit = (self.df.loc[self.current_step, ‘Real open’]   / self.df.loc[self.start_step, ‘Real open’] - 1) * 100
+diff = profit_percent — benchmark_profit
+reward = np.sign(diff) * (diff)**2
+# A single episode can last a maximum of MAX_STEPS steps
+if self.current_step >= static.MAX_STEPS + self.start_step:
+end = True
+else:
+end = False
+done = self.net_worth <= 0 or self.bnb_usdt_held <= 0 or end
+if done and end:
+self.episode_reward = reward
+self._render_episode()
+self.graph_profit.append(profit_percent)
+self.graph_benchmark.append(benchmark_profit)
+self.graph_reward.append(reward)
+self.episode += 1
+obs = self._next_observation()
+# {} needed because gym wants 4 args
+return obs, reward, done, {}
+This method calculate our reward. The choice of the formula is crucial for our bot, it depends to the profit we have made (easily understandable) but it also depends on the benchmark profit. It is made that way because it is easy for our agent to make +1% when the BTC make +10% and it is hard to keep our money when BTC goes -10%. We have to reward the agent when he choose the best solution not when he make money.
+
+Render the choice of our agent
+We have make 2 method that render, one render a summary of our balance, crypto held and profit for each step and one render at the end of each episode. We also plot a graph to have a a better visualisation.
+
+Conclusion
+We have made a environment close to the Binance site, we did not forget fees that can be change on the static.py file. The reward function can be tested and changed if we find a better one but this one will do the work for the moment.
+
+Our objective is to train an agent by making him on the binance environment created in the last article. Let’s see if he can make money trading Bitcoin. All of the code for this article is available on my GitHub.
+
+In this article we will be using OpenAI’s gym and PPO agent from the stable-baseline library. We already have a env.py which contains our RL environment, a static.py file which contains all of our constants like fees paid and a .csv file which contains the past Bitcoin data that we have created in this article.
+
+We will create a file main.py that we will run and that will train our agent.
+
+The main.py file
+First let import what we will need for our env, we will explain them after:
+
+from stable_baselines.common.policies import MlpPolicy
+from stable_baselines.common.vec_env import DummyVecEnv
+from stable_baselines import PPO2
+from env import CryptoEnv
+import pandas as pd
+import os
+Then we read the data that we have put on a data folder:
+
+df = pd.read_csv(‘data/BTCUSDT.csv’, index_col=0)
+We have imported our environment created (CryptoEnv), the way to instantiate it is not really instinctive:
+
+env = DummyVecEnv([lambda: CryptoEnv(df)])
+We create our agent that will try his best to trade on our environment. We can change parameters like gamma or the learning rate to have better results.
+
+# Instanciate the agent
+model = PPO2(MlpPolicy, env, gamma=1, learning_rate=0.01, verbose=0)
+We then train the agent during 5000000 timesteps:
+
+# Train the agent
+total_timesteps = int(os.getenv(‘TOTAL_TIMESTEPS’, 500000))
+model.learn(total_timesteps)
+And let’s render if we succeed to increase our reward over time:
+
+# Render the graph of rewards
+env.render(graph=True)
+After training we need to check if he can predict the market:
+
+# Trained agent performence
+obs = env.reset()
+env.render()
+for i in range(100000):
+action, _states = model.predict(obs)
+obs, rewards, done, info = env.step(action)
+env.render(print_step=True)
+Run main.py !
+Let’s see the result for a short training:
+
+
+So after a few training, what i see is that the agent is doing very poorly at first because he is trading WAY TOO MUCH and he is paying the trading fees each time.
+
+After ~50 episodes he understand that trading comes with a cost. After ~1000 episodes he barely trade like he know that he will just loose money most of the time.
+
+It’s a great news ! That means we have succeeded to create an environment close to the real one. Surpassing the 0% profit is the real challenge, for the moment we have only recreated the environment.

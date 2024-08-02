@@ -41,3 +41,6 @@ Each Team member worked on different prototypes
 | --------- | ------ |
 |  |  |
 
+## [Examples](examples)
+
+These are example files build by Jeff on how to use ChromaDB server, Llama-cpp-server, and Alternate embedding methods

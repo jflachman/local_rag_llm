@@ -1,0 +1,131 @@
+Hi and welcome to the intro series on Reinforcement Learning, today’s topic will be about the DQN algorithm!
+
+
+This blog post is part of a longer series about Reinforcement Learning (RL). If you are completely unfamiliar with RL, I suggest you read my previous blog posts first.
+
+Previously we talked about policy gradient algorithms. Today we will have a look at a different family of RL algorithms: Q-learning algorithms. And more specifically, we will focus on the vanilla DQN-algorithm.
+
+The topics for today’s blog post are:
+
+Historical significance of DQN
+What is Q-Learning?
+DQN Explained
+Q-Learning VS. Policy Gradients
+There will also be a part 2 for today’s blog post, which will include a basic implementation of DQN.
+
+Note: If you are reading this on a smartphone browser, you might not be able to view the subscripts. You can download the Medium app to mitigate this.
+
+Historical significance of DQN
+The algorithm we will discuss today is called DQN. You might wonder why we would discuss such an old algorithm at this point, and you’d be right about the fact that DQN is in fact quite old by now (the paper was published in 2013, an age ago in the software industry!). But despite its age, DQN carries some historical significance as the original paper by Mnih et al. was the first paper to successfully combine deep learning (the use of deep neural networks) with reinforcement learning. Furthermore, some of the ideas from this paper are still valuable today.
+
+The paper specifically showed how a reinforcement learning agent can learn how to play Atari games, directly from pixels. In other words, the algorithm directly takes images as input, just like a human would see them, and outputs which actions to take to successfully play these games.
+
+
+Although the idea of Q-learning was not new at the time, Q-learning hadn’t been directly applied before to high-dimensional inputs (like images). Of course, the algorithm was not perfect yet. DQN had many similar problems as the ones we have today, such as sample inefficiency, but it heralded a new age for reinforcement learning, the age of Deep Reinforcement Learning.
+
+
+In the picture above, you can see a performance comparison of various versions of DQN that have come out since the original. Even to this day, these algorithms remain a popular choice for model-free, off-policy RL.
+
+What is Q-Learning?
+Before we dive into the specifics of DQN, let’s first talk about Q-learning in general.
+
+In the previous blog posts we focussed on policy gradient algorithms. Policy gradient algorithms try to optimise the policy/behaviour of an agent by directly changing the policy. This, however, is not the case for Q-learning algorithms. Q-learning algorithms try to exploit the fact that: if we know the Q-function, we can construct an optimal policy by selecting the action at every state that has the highest Q-value.
+
+Let’s back up for a bit and go over some of the terminology. We are still operating in the typical RL framework: we have an agent taking actions in an environment at every discrete timestep. The agent starts in a certain state (or receives an observation of the state). After taking an action, the agent receives a new observation, a (possibly negative) reward, and the agent will be in a new state or receives a new observation.
+
+
+The goal of reinforcement learning is to learn a policy (a behaviour) that maximizes the agent’s expected cumulative reward. Or in other words, we want the agent to behave in a way such that the reward it receives over time is maximal.
+
+In previous blog posts, we have talked about the value function:
+
+
+The value function tells us how valuable it is to be in state s when following policy π. It is equal to the summed reward of the trajectory that is expected to follow from state s.
+
+
+A closely related function, is the Q-function:
+
+
+The Q-function tells us how valuable it is to be in state s and take action a while following policy π.
+
+
+Now let’s say that we denote the Q-function for an optimal policy (a policy that maximises the cumulative reward) as Q*. The optimal Q-function needs to adhere to one important property, the Bellman equation:
+
+
+The Bellman equation tells us that, for the optimal policy, the value of taking action a while in state s, is equal to the immediate reward r, plus the value of taking the best possible action in the next state (multiplied by discount factor gamma). In other words, the Bellman equation is a recursive formula, the value of taking an action is equal to the reward you get for that action plus following the optimal policy from then on.
+
+The idea behind Q-learning is that we can learn or approximate the optimal Q-function by iteratively updating our estimate of it based on the Bellman equation.
+
+If you haven’t quite caught on to the idea yet, don’t worry, things will probably become more clear in the next section. There we will look at this idea from a more practical point of view.
+
+DQN Explained
+So, our goal is to find a good approximation of the Q-function. If we can do this, we can make our agent behave optimally by selecting the action that produces the highest Q-value (gives the highest reward) at every state.
+
+A rough outline of the algorithm would look like this:
+
+Initialize Q-function approximation
+Repeat:
+    Collect experience
+    Update Q-function approximation
+As you can tell, we repeatedly switch between collecting new experience and updating our approximation of the q-function. We switch because crucially the states and action we will see, also depend on the policy/behaviour of our agent. We may only encounter certain states after we have already learned certain strategies.
+
+Q-function representation
+In order to make an estimate of the Q-function, we will need to represent it somehow. In earlier versions of Q-learning, people tried to keep track of a table that contained the exact reward for every state and action that the agent took. In practice this is often infeasible, especially when our state is highly dimensional such as when we use images for representing the state (remember, images are just matrices/tensors with pixel intensity values). One of the innovations the original DQN paper brought, was using a neural network to approximate the Q-function.
+
+
+In theory the neural network should take a state and an action as input and output the corresponding Q-value. In practice, we will only use the state as input and output a Q-value for each possible action. This makes the learning process a bit easier and saves some computation costs.
+
+Initially the neural network weights will be initialised with random values, over time we update the values for a more accurate estimate based on the collected experience.
+
+Replay memory
+As is mentioned above, we continuously collect new experience. An advantage of DQN is that it is an off-policy algorithm, meaning that it can learn from collected experience, even if that experience was collected with an older version of the policy.
+
+
+Collecting experience happens by letting our agent operate in the environment and storing so-called transitions in a replay buffer/replay memory. A transition refers to the combination of a state, action, next state, reward and an indication whether the episode was over after this transition.
+
+During the learning process the buffer will be filled with transitions, while we update our q-function estimate based on the already collected transitions. Over time, older transitions will be replaced with new ones once the maximum capacity of the memory is reached.
+
+Some variations of DQN use prioritised replay memory, where transitions that are more significant for achieving high reward are more often sampled from the memory.
+
+Q-function update
+For updating our q-function estimate, we make use of the Bellman equation. We make a prediction of the state from our transition and for the next state in our transition. We then calculate the gradient based on the difference between our Q-value estimate for state sₜ and the received reward plus the maximum Q-value prediction of the next state sₜ₊₁(multiplied by a discount factor).
+
+
+Note that, in order to do the gradient update for the q-function, we need to mask out the predicted values for the actions that weren’t actually taken in the sampled transition.
+
+For example, if we fetch a (non-terminal) transition from our replay memory that contains the following values: state s₇, action a₃, next state s₈ and reward 10. Our Q-value estimate for (s₇, a₃) might be 20 and the maximum Q-value estimate (the highest value for any of the actions) for s₈ may be 8. If we use the mean-squared error, the loss would be 400–324. We get 400 by taking the second power of the estimate for s₇ and a₃ (20²) and we get 324 by taking the second power of the estimate for the highest Q-value for s₈ plus the actual observed reward ((8+10)²).
+
+The loss we just calculated is only valid for action a₃ and not for the other Q-values produced by our neural network, so we want to mask out those other values/gradients, such that we don’t influence the variables in the neural network used to estimate the Q-values of the other actions.
+
+Epsilon-greedy policy
+We are now close to having all the ingredients needed for our algorithm. One thing that is still missing, is a way for deciding which actions our agent should take during the process of collecting experience. This is the classical exploration-exploitation trade-off. On one hand, we can let our agent take random actions to discover new strategies (exploration), but if we only act randomly, we don’t use the knowledge we have already gained from previous experience. On the other hand, if we only use what we have already learned in the past (exploitation), we won’t discover any new strategies. Hence, the trade-off.
+
+Some algorithms deal with this trade-off in a natural way. For example, some policy gradient algorithms output a distribution over actions and from time to time actions get selected that are not optimal according to the algorithm. DQN on the other hand, deals with this trade-off very explicitly by using a so-called epsilon-greedy strategy. Despite the fancy name, the idea is rather simple. We will define a value epsilon ϵ. Every time we need to choose an action, we will generate a new value. If that value is greater than epsilon ϵ, we will select the action that is optimal according to our Q-function (the action with the highest Q-value should give the highest reward). If the generated value is smaller than epsilon ϵ on the other hand, we will select a random value.
+
+During the course of the training, we can decrease the value of epsilon ϵ, such that our algorithm will do more exploitation over time.
+
+Putting it all together
+Alright, with all this knowledge in mind, I can now present the algorithm as it was described by the original paper. Let’s take a look and go over it.
+
+
+In the first lines, we initialise our empty replay memory with capacity N and an initially random Q-function. The capacity N refers to the maximum number of transitions that will be stored in this memory.
+
+We then start from an initial state (referred to as a “sequence” in the algorithm). The original authors also talk about “preprocessed sequences”, the preprocessed part refers to the fact that some states/sequences might need some preprocessing before they are fed into the neural network. For example, in the case of a game, they stack several images of the game together, because a single image is not enough to determine how certain objects are moving (see image).
+
+
+Next, we perform an action based on the epsilon-greedy strategy (either random or based on the Q-function estimate), and we store all the information we get from taking that action. The stored information contains the state, the action taken, the reward and the next state.
+
+We then go on to sample some of the transitions from our replay memory and use the formula described above to calculate the loss. Note that for a terminal state (a transition where the episode is ended), solely the reward is used as a target instead.
+
+We then perform a gradient step (update the weights of our neural network) and we repeat this until we are satisfied with the results. That’s it! You now have a solid understanding of the basics of DQN.
+
+Q-Learning VS. Policy Gradients
+As a short final note, I want to comment a bit on the difference between Q-learning and the algorithms we previously mentioned (Policy Gradient algorithms).
+
+Policy Gradient algorithms are sometimes regarded as being more stable. They are principled because we are directly optimising the policy. This is not the case for Q-learning, in the case of Q-learning we are constructing a policy by selecting an action for every state based on our estimate of the Q-function.
+
+The advantage of Q-learning is that it can be used in an off-policy way. Since we store transitions in a buffer, we can later on reuse transitions for which the actions haven’t necessarily been generated by the latest policy. This makes Q-learning more sample-efficient, since we need to interact less with the environment.
+
+Both methods come with their own trade-offs, and some of the methods we will explore later on, try to achieve the best of both worlds. Stay tuned if you want to learn more about this.
+
+Conclusion
+Congratulations for making it all the way to the end of this article! You should now have a solid understanding of Q-learning and DQN. This knowledge will be valuable when we explore even more advanced algorithms in the future. In the next part of this article, I will present an implementation of DQN. The implementation will be built further upon the educative RL framework we are developing for this blog (see the REINFORCE-implementation).
