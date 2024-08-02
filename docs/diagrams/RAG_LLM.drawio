@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-07-11T22:08:35.871Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="CKze41NT_rZYbk5E3_1_" version="24.5.3" type="device" pages="2">
+<mxfile host="Electron" modified="2024-08-02T00:32:12.582Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="fxZ_dUy9SpWQltoq8awk" version="24.5.3" type="device" pages="2">
   <diagram id="KiLYIlECmqKf7YQ0Mepz" name="Page-2">
-    <mxGraphModel dx="1900" dy="1075" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="972" dy="1025" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -12,7 +12,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Wiu6QURZEILxNYApkuo2-15" value="add_doc_to_db.py" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="Wiu6QURZEILxNYApkuo2-15" value="01_load_docs_vectordb.ipynb" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="170" y="320" width="320" height="340" as="geometry">
             <mxRectangle x="-64.5" y="60" width="140" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -127,13 +127,13 @@
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Wiu6QURZEILxNYApkuo2-48" value="Chroma Container&lt;div&gt;http://localhost:8000&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=40;" parent="1" vertex="1">
+        <mxCell id="Wiu6QURZEILxNYApkuo2-48" value="Chroma Container&lt;div&gt;http://localhost:8200&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=40;" parent="1" vertex="1">
           <mxGeometry x="510" y="320" width="130" height="170" as="geometry" />
         </mxCell>
         <mxCell id="Wiu6QURZEILxNYApkuo2-38" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;Vector&lt;div&gt;Store&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="Wiu6QURZEILxNYApkuo2-48" vertex="1">
           <mxGeometry x="42" y="72.5" width="60" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="Wiu6QURZEILxNYApkuo2-49" value="Streamlit Container&lt;div&gt;http://localhost:8501&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=40;" parent="1" vertex="1">
+        <mxCell id="Wiu6QURZEILxNYApkuo2-49" value="02_rag_query.ipynb" style="swimlane;whiteSpace=wrap;html=1;startSize=40;" parent="1" vertex="1">
           <mxGeometry x="352" y="40" width="288" height="270" as="geometry" />
         </mxCell>
         <mxCell id="ExRmc16yj7vaiUwGkYOo-1" value="Streamlit UI" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" parent="Wiu6QURZEILxNYApkuo2-49" vertex="1">
@@ -166,7 +166,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ExRmc16yj7vaiUwGkYOo-10" value="Ollama Container&lt;div&gt;http://localhost:11434&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=40;" parent="1" vertex="1">
+        <mxCell id="ExRmc16yj7vaiUwGkYOo-10" value="Ollama Container&lt;div&gt;http://localhost:8100&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=40;" parent="1" vertex="1">
           <mxGeometry x="650" y="40" width="140" height="200" as="geometry" />
         </mxCell>
         <mxCell id="Vr5v-szwOl1e44DSBkWA-1" value="Ollama Server" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_on_premise;strokeColor=#7D8998;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;" parent="ExRmc16yj7vaiUwGkYOo-10" vertex="1">
