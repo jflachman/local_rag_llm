@@ -33,6 +33,8 @@ The goal of this project is to implement a Local Language Model (LLM) capable of
 
 This project will be reused after the class for developing documentation from existing proprietary documents at students current employer.
 
+**NOTE:** Splitting text and saving in the repository is handled with a jupyter notebook.  The RAG query and response are also handled with a Jupyter notebook.  These were slated to be added to a third docker container for automation.  However, due to refactoring, the final RAG UI was not re-implemented before the product demonstration. The authors indend to return and complete this work in Q4, 2024. 
+
 ## Project Description
 
 This project aims to enhance document management by leveraging an LLM to process and understand proprietary documents. The LLM will be integrated into a local system that will ensure data security and compliance with privacy regulations. The key functionalities of the LLM will include document review, question answering, summarization, and document creation assistance.
